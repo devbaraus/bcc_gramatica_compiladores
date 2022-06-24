@@ -810,7 +810,7 @@ YY_RULE_SETUP
 case 3:
 YY_RULE_SETUP
 #line 14 "scanner.l"
-{ printf("string "); yylval.ystr = yytext;  return(VSTR); }
+{ printf("string "); yylval.ystr = stringpool(yytext);  return(VSTR); }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP

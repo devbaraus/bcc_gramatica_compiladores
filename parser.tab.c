@@ -81,11 +81,10 @@ FILE * output;
 #define FLT     3
 #define STR     4
 #define ARR		5
-#define OBJ		6
 #define AddVAR(n,t) SymTab=MakeVAR(n,t,SymTab)
 #define ASSERT(x,y) if((x)) printf("%s on line %d\n",(y),yylineno)
 
-#line 89 "parser.tab.c" /* yacc.c:339  */
+#line 88 "parser.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -138,14 +137,14 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 26 "parser.y" /* yacc.c:355  */
+#line 25 "parser.y" /* yacc.c:355  */
 
 	int   yint;// 1
 	int ybool; //2
 	float yfloat; //3
 	char* ystr; //4
 
-#line 149 "parser.tab.c" /* yacc.c:355  */
+#line 148 "parser.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -162,7 +161,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 166 "parser.tab.c" /* yacc.c:358  */
+#line 165 "parser.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -460,10 +459,10 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    48,    48,    48,    51,    51,    53,    56,    57,    57,
-      63,    63,    69,    71,    69,    77,    79,    77,    85,    87,
-      85,    95,    96,    99,   100,   101,   104,   105,   106,   111,
-     115,   119,   123,   127,   135,   143,   151,   159
+       0,    47,    47,    47,    50,    50,    52,    55,    56,    56,
+      62,    62,    68,    70,    68,    76,    78,    76,    84,    86,
+      84,    94,    95,    98,    99,   100,   103,   104,   105,   110,
+     114,   118,   122,   126,   134,   142,   150,   158
 };
 #endif
 
@@ -1273,162 +1272,162 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 48 "parser.y" /* yacc.c:1646  */
+#line 47 "parser.y" /* yacc.c:1646  */
     {}
-#line 1279 "parser.tab.c" /* yacc.c:1646  */
+#line 1278 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 57 "parser.y" /* yacc.c:1646  */
+#line 56 "parser.y" /* yacc.c:1646  */
     {
 	VAR *p = FindVAR((yyvsp[-1].ystr));
 	ASSERT((p!=NULL), "Identificador já declarado");
 	AddVAR((yyvsp[-1].ystr),UNDECL);
 	fprintf(output, "%s = None\n", (yyvsp[-1].ystr));
 }
-#line 1290 "parser.tab.c" /* yacc.c:1646  */
+#line 1289 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 63 "parser.y" /* yacc.c:1646  */
+#line 62 "parser.y" /* yacc.c:1646  */
     {
 	VAR *p = FindVAR((yyvsp[-1].ystr));
 	ASSERT((p!=NULL), "Identificador já declarado");
 	AddVAR((yyvsp[-1].ystr),UNDECL);
 	fprintf(output, "%s = None\n", (yyvsp[-1].ystr));
 }
-#line 1301 "parser.tab.c" /* yacc.c:1646  */
+#line 1300 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 69 "parser.y" /* yacc.c:1646  */
+#line 68 "parser.y" /* yacc.c:1646  */
     {
 	fprintf(output, "%s = ", (yyvsp[-1].ystr));
 }
-#line 1309 "parser.tab.c" /* yacc.c:1646  */
+#line 1308 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 71 "parser.y" /* yacc.c:1646  */
+#line 70 "parser.y" /* yacc.c:1646  */
     {
 	VAR *p = FindVAR((yyvsp[-4].ystr));
 	ASSERT((p!=NULL), "Identificador já declarado");
 	AddVAR((yyvsp[-4].ystr), (yyvsp[-1].yint));
 	fprintf(output, "\n");
 }
-#line 1320 "parser.tab.c" /* yacc.c:1646  */
+#line 1319 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 77 "parser.y" /* yacc.c:1646  */
+#line 76 "parser.y" /* yacc.c:1646  */
     {
 	fprintf(output, "%s = ", (yyvsp[-1].ystr));
 }
-#line 1328 "parser.tab.c" /* yacc.c:1646  */
+#line 1327 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 79 "parser.y" /* yacc.c:1646  */
+#line 78 "parser.y" /* yacc.c:1646  */
     {
 	VAR *p = FindVAR((yyvsp[-4].ystr));
 	ASSERT((p!=NULL), "Identificador já declarado");
 	AddVAR((yyvsp[-4].ystr), (yyvsp[-1].yint));
 	fprintf(output, "\n");
 }
-#line 1339 "parser.tab.c" /* yacc.c:1646  */
+#line 1338 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 85 "parser.y" /* yacc.c:1646  */
+#line 84 "parser.y" /* yacc.c:1646  */
     {
 	fprintf(output, "%s = ", (yyvsp[-1].ystr));
 }
-#line 1347 "parser.tab.c" /* yacc.c:1646  */
+#line 1346 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 87 "parser.y" /* yacc.c:1646  */
+#line 86 "parser.y" /* yacc.c:1646  */
     {
 	VAR *p = FindVAR((yyvsp[-4].ystr));
 	ASSERT((p!=NULL), "Identificador já declarado");
 	AddVAR((yyvsp[-4].ystr), (yyvsp[-1].yint));
 	fprintf(output, "\n");
 }
-#line 1358 "parser.tab.c" /* yacc.c:1646  */
+#line 1357 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 99 "parser.y" /* yacc.c:1646  */
+#line 98 "parser.y" /* yacc.c:1646  */
     { (yyval.yint)= STR; }
-#line 1364 "parser.tab.c" /* yacc.c:1646  */
+#line 1363 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 100 "parser.y" /* yacc.c:1646  */
+#line 99 "parser.y" /* yacc.c:1646  */
     { (yyval.yint)= BOOL;  /* fprintf(output, "%s", $1 == "true" ? "True" : "False"); */ }
-#line 1370 "parser.tab.c" /* yacc.c:1646  */
+#line 1369 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 104 "parser.y" /* yacc.c:1646  */
+#line 103 "parser.y" /* yacc.c:1646  */
     { (yyval.yint)= INT; fprintf(output, "%d", (yyvsp[0].yint)); }
-#line 1376 "parser.tab.c" /* yacc.c:1646  */
+#line 1375 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 105 "parser.y" /* yacc.c:1646  */
+#line 104 "parser.y" /* yacc.c:1646  */
     { (yyval.yint)= FLT; fprintf(output, "%f", (yyvsp[0].yfloat)); }
-#line 1382 "parser.tab.c" /* yacc.c:1646  */
+#line 1381 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 106 "parser.y" /* yacc.c:1646  */
+#line 105 "parser.y" /* yacc.c:1646  */
     {  
 	VAR *p=FindVAR((yyvsp[0].ystr));
 	ASSERT(p==NULL,"Identificador Não declarado");
 	(yyval.yint)= (p!=NULL) ? p->type : UNDECL;  
 }
-#line 1392 "parser.tab.c" /* yacc.c:1646  */
+#line 1391 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 111 "parser.y" /* yacc.c:1646  */
+#line 110 "parser.y" /* yacc.c:1646  */
     {  
 	ASSERT(((yyvsp[-2].yint)== INT || (yyvsp[-2].yint)== FLT) && ((yyvsp[0].yint)== INT || (yyvsp[0].yint)== FLT), "Operadores devem ser INT ou FLT");
     (yyval.yint)= BOOL;  
 }
-#line 1401 "parser.tab.c" /* yacc.c:1646  */
+#line 1400 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 115 "parser.y" /* yacc.c:1646  */
+#line 114 "parser.y" /* yacc.c:1646  */
     { 
 	ASSERT(  ((yyvsp[-2].yint)== INT || (yyvsp[-2].yint)== FLT) && ((yyvsp[0].yint)== INT || (yyvsp[0].yint)== FLT) , "Operadores devem ser INT ou FLT");
     (yyval.yint)= BOOL;
 }
-#line 1410 "parser.tab.c" /* yacc.c:1646  */
+#line 1409 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 119 "parser.y" /* yacc.c:1646  */
+#line 118 "parser.y" /* yacc.c:1646  */
     {  
 	ASSERT(  ((yyvsp[-2].yint)== INT || (yyvsp[-2].yint)== FLT) && ((yyvsp[0].yint)== INT || (yyvsp[0].yint)== FLT)  , "Operadores devem ser INT ou FLT");
     (yyval.yint)= BOOL; 
 }
-#line 1419 "parser.tab.c" /* yacc.c:1646  */
+#line 1418 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 123 "parser.y" /* yacc.c:1646  */
+#line 122 "parser.y" /* yacc.c:1646  */
     { 
 	ASSERT(  ((yyvsp[-2].yint)== INT || (yyvsp[-2].yint)== FLT) && ((yyvsp[0].yint)== INT || (yyvsp[0].yint)== FLT)  , "Operadores devem ser INT ou FLT");
     (yyval.yint)= BOOL;  
 }
-#line 1428 "parser.tab.c" /* yacc.c:1646  */
+#line 1427 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 127 "parser.y" /* yacc.c:1646  */
+#line 126 "parser.y" /* yacc.c:1646  */
     {   
 	ASSERT(  ((yyvsp[-2].yint)== INT || (yyvsp[-2].yint)== FLT) && ((yyvsp[0].yint)== INT || (yyvsp[0].yint)== FLT)  , "Operadores devem ser INT ou FLT");
 	if ((yyvsp[-2].yint)==FLT || (yyvsp[0].yint)==FLT){
@@ -1437,11 +1436,11 @@ yyreduce:
 		(yyval.yint)= INT;
 	}
 }
-#line 1441 "parser.tab.c" /* yacc.c:1646  */
+#line 1440 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 135 "parser.y" /* yacc.c:1646  */
+#line 134 "parser.y" /* yacc.c:1646  */
     { 
 	ASSERT(  ((yyvsp[-2].yint)== INT || (yyvsp[-2].yint)== FLT) && ((yyvsp[0].yint)== INT || (yyvsp[0].yint)== FLT)  , "Operadores devem ser INT ou FLT");
 	if ((yyvsp[-2].yint)==FLT || (yyvsp[0].yint)==FLT){
@@ -1450,11 +1449,11 @@ yyreduce:
 		(yyval.yint)= INT;
 	}
 }
-#line 1454 "parser.tab.c" /* yacc.c:1646  */
+#line 1453 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 143 "parser.y" /* yacc.c:1646  */
+#line 142 "parser.y" /* yacc.c:1646  */
     { 
 	ASSERT(  ((yyvsp[-2].yint)== INT || (yyvsp[-2].yint)== FLT) && ((yyvsp[0].yint)== INT || (yyvsp[0].yint)== FLT)  , "Operadores devem ser INT ou FLT");
 	if ((yyvsp[-2].yint)==FLT || (yyvsp[0].yint)==FLT){
@@ -1463,11 +1462,11 @@ yyreduce:
 		(yyval.yint)= INT;
 	}
 }
-#line 1467 "parser.tab.c" /* yacc.c:1646  */
+#line 1466 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 151 "parser.y" /* yacc.c:1646  */
+#line 150 "parser.y" /* yacc.c:1646  */
     { 
 	ASSERT(  ((yyvsp[-2].yint)== INT || (yyvsp[-2].yint)== FLT) && ((yyvsp[0].yint)== INT || (yyvsp[0].yint)== FLT)  , "Operadores devem ser INT ou FLT");
 	if ((yyvsp[-2].yint)==FLT || (yyvsp[0].yint)==FLT){
@@ -1476,11 +1475,11 @@ yyreduce:
 		(yyval.yint)= INT;
 	}
 }
-#line 1480 "parser.tab.c" /* yacc.c:1646  */
+#line 1479 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 159 "parser.y" /* yacc.c:1646  */
+#line 158 "parser.y" /* yacc.c:1646  */
     { 
 	ASSERT(  ((yyvsp[-2].yint)== INT || (yyvsp[-2].yint)== FLT) && ((yyvsp[0].yint)== INT || (yyvsp[0].yint)== FLT)  , "Operadores devem ser INT ou FLT");
 	if ((yyvsp[-2].yint)==FLT || (yyvsp[0].yint)==FLT){
@@ -1489,11 +1488,11 @@ yyreduce:
 		(yyval.yint)= INT;
 	}
 }
-#line 1493 "parser.tab.c" /* yacc.c:1646  */
+#line 1492 "parser.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1497 "parser.tab.c" /* yacc.c:1646  */
+#line 1496 "parser.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1721,7 +1720,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 170 "parser.y" /* yacc.c:1906  */
+#line 169 "parser.y" /* yacc.c:1906  */
 
 
 main( int argc, char *argv[] ) {

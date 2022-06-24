@@ -95,8 +95,8 @@ comma_not:
 | ";"
 ;
 
-value: VSTR { $$= STR; }
-| VBOOL { $$= BOOL;  /* fprintf(output, "%s", $1 == "true" ? "True" : "False"); */ }
+value: VSTR { $$= STR; fprintf(output, "%s", $1); }
+| VBOOL { $$= BOOL; fprintf(output, "%s", $1 == "true" ? "True" : "False"); }
 | exp
 ;
 

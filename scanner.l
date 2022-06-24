@@ -11,7 +11,7 @@ ID       [_a-zA-Z][_A-Za-z0-9]*
 
 "="                  { printf("assignment "); return(ASSGNOP); }
 ">="                 { printf(">= "); return(MAIORIGUAL); }
-"\"".*"\""           { printf("string "); yylval.ystr = yytext;  return(VSTR); }
+"\"".*"\""           { printf("string "); yylval.ystr = stringpool(yytext);  return(VSTR); }
 "true"|"false"       { printf("boolean ");  yylval.ybool = yytext == "true"; return(VBOOL); }
 {DIGIT}+             { printf("integer "); yylval.yint = atoi(yytext);  return(VINT); }
 {DIGIT}*"."{DIGIT}+  { printf("float "); yylval.yfloat = atof(yytext);  return(VFLOAT); }
