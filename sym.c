@@ -13,7 +13,6 @@ static char *strp;
 #define FLT     3
 #define STR     4
 #define ARR		5
-#define OBJ		6
 static int strsize = 0;
 int global_scope = 0;
 //char *calloc(int,int);
@@ -27,7 +26,6 @@ const char* TypeName(int x){
 	if(x == FLT) return "float";
 	if(x == STR) return "str";
 	if(x == ARR) return "list";
-	if(x == OBJ) return "dict";
 }
 
 VAR *MakeVAR(char *name, int type, VAR *next) {

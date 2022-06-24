@@ -63,10 +63,10 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 25 "parser.y" /* yacc.c:1909  */
+#line 26 "parser.y" /* yacc.c:1909  */
 
 	int   yint;// 1
-	//bool ybool; //2
+	int ybool; //2
 	float yfloat; //3
 	char* ystr; //4
 

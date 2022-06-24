@@ -5,7 +5,6 @@
 //#include <time.h>
 //#include <stdlib.h>
 
-#include <stdbool.h>
 #include <string.h>
 extern int yylineno;
 extern int global_scope;
@@ -17,7 +16,6 @@ FILE * output;
 #define FLT     3
 #define STR     4
 #define ARR		5
-#define OBJ		6
 #define AddVAR(n,t) SymTab=MakeVAR(n,t,SymTab)
 #define ASSERT(x,y) if((x)) printf("%s on line %d\n",(y),yylineno)
 %}
@@ -26,7 +24,7 @@ FILE * output;
 //docker run  -it  -v "%cd%":/usr/src  phdcoder/flexbison
 %union {
 	int   yint;// 1
-	bool ybool; //2
+	int ybool; //2
 	float yfloat; //3
 	char* ystr; //4
 }
@@ -97,8 +95,8 @@ comma_not:
 | ";"
 ;
 
-value: VSTR { $$= STR;  fprintf(output, "%c", $1); }
-| VBOOL { $$= BOOL;  fprintf(output, "%s", $1 == "true" ? "True" : "False"); }
+value: VSTR { $$= STR; }
+| VBOOL { $$= BOOL;  /* fprintf(output, "%s", $1 == "true" ? "True" : "False"); */ }
 | exp
 ;
 

@@ -1,0 +1,859 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 $@1: %empty
+
+    2 program: $@1 commands
+
+    3 commands: command ';' commands
+    4         | %empty
+
+    5 command: declarations
+
+    6 declarations: %empty
+
+    7 $@2: %empty
+
+    8 declarations: DLET IDENTIFIER comma_not $@2 declarations
+
+    9 $@3: %empty
+
+   10 declarations: DVAR IDENTIFIER comma_not $@3 declarations
+
+   11 $@4: %empty
+
+   12 $@5: %empty
+
+   13 declarations: DLET IDENTIFIER ASSGNOP $@4 value comma_not $@5 declarations
+
+   14 $@6: %empty
+
+   15 $@7: %empty
+
+   16 declarations: DVAR IDENTIFIER ASSGNOP $@6 value comma_not $@7 declarations
+
+   17 $@8: %empty
+
+   18 $@9: %empty
+
+   19 declarations: DCONST IDENTIFIER ASSGNOP $@8 value comma_not $@9 declarations
+
+   20 comma_not: %empty
+   21          | ";"
+
+   22 value: VSTR
+   23      | VBOOL
+   24      | exp
+
+   25 exp: VINT
+   26    | VFLOAT
+   27    | IDENTIFIER
+   28    | exp MAIORIGUAL exp
+   29    | exp '<' exp
+   30    | exp '=' exp
+   31    | exp '>' exp
+   32    | exp '+' exp
+   33    | exp '-' exp
+   34    | exp '*' exp
+   35    | exp '/' exp
+   36    | exp '^' exp
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'*' (42) 34
+'+' (43) 32
+'-' (45) 33
+'/' (47) 35
+';' (59) 3
+'<' (60) 29
+'=' (61) 30
+'>' (62) 31
+'^' (94) 36
+error (256)
+DLET (258) 8 13
+DCONST (259) 19
+DVAR (260) 10 16
+VSTR (261) 22
+VBOOL (262) 23
+VINT (263) 25
+VFLOAT (264) 26
+IDENTIFIER (265) 8 10 13 16 19 27
+ASSGNOP (266) 13 16 19
+MAIORIGUAL (267) 28
+";" (268) 21
+
+
+Nonterminals, with rules where they appear
+
+$accept (23)
+    on left: 0
+program (24)
+    on left: 2, on right: 0
+$@1 (25)
+    on left: 1, on right: 2
+commands (26)
+    on left: 3 4, on right: 2 3
+command (27)
+    on left: 5, on right: 3
+declarations (28)
+    on left: 6 8 10 13 16 19, on right: 5 8 10 13 16 19
+$@2 (29)
+    on left: 7, on right: 8
+$@3 (30)
+    on left: 9, on right: 10
+$@4 (31)
+    on left: 11, on right: 13
+$@5 (32)
+    on left: 12, on right: 13
+$@6 (33)
+    on left: 14, on right: 16
+$@7 (34)
+    on left: 15, on right: 16
+$@8 (35)
+    on left: 17, on right: 19
+$@9 (36)
+    on left: 18, on right: 19
+comma_not (37)
+    on left: 20 21, on right: 8 10 13 16 19
+value (38)
+    on left: 22 23 24, on right: 13 16 19
+exp (39)
+    on left: 25 26 27 28 29 30 31 32 33 34 35 36, on right: 24 28 29
+    30 31 32 33 34 35 36
+
+
+State 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 1 ($@1)
+
+    program  go to state 1
+    $@1      go to state 2
+
+
+State 1
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 3
+
+
+State 2
+
+    2 program: $@1 . commands
+
+    DLET    shift, and go to state 4
+    DCONST  shift, and go to state 5
+    DVAR    shift, and go to state 6
+
+    ';'       reduce using rule 6 (declarations)
+    $default  reduce using rule 4 (commands)
+
+    commands      go to state 7
+    command       go to state 8
+    declarations  go to state 9
+
+
+State 3
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 4
+
+    8 declarations: DLET . IDENTIFIER comma_not $@2 declarations
+   13             | DLET . IDENTIFIER ASSGNOP $@4 value comma_not $@5 declarations
+
+    IDENTIFIER  shift, and go to state 10
+
+
+State 5
+
+   19 declarations: DCONST . IDENTIFIER ASSGNOP $@8 value comma_not $@9 declarations
+
+    IDENTIFIER  shift, and go to state 11
+
+
+State 6
+
+   10 declarations: DVAR . IDENTIFIER comma_not $@3 declarations
+   16             | DVAR . IDENTIFIER ASSGNOP $@6 value comma_not $@7 declarations
+
+    IDENTIFIER  shift, and go to state 12
+
+
+State 7
+
+    2 program: $@1 commands .
+
+    $default  reduce using rule 2 (program)
+
+
+State 8
+
+    3 commands: command . ';' commands
+
+    ';'  shift, and go to state 13
+
+
+State 9
+
+    5 command: declarations .
+
+    $default  reduce using rule 5 (command)
+
+
+State 10
+
+    8 declarations: DLET IDENTIFIER . comma_not $@2 declarations
+   13             | DLET IDENTIFIER . ASSGNOP $@4 value comma_not $@5 declarations
+
+    ASSGNOP  shift, and go to state 14
+    ";"      shift, and go to state 15
+
+    $default  reduce using rule 20 (comma_not)
+
+    comma_not  go to state 16
+
+
+State 11
+
+   19 declarations: DCONST IDENTIFIER . ASSGNOP $@8 value comma_not $@9 declarations
+
+    ASSGNOP  shift, and go to state 17
+
+
+State 12
+
+   10 declarations: DVAR IDENTIFIER . comma_not $@3 declarations
+   16             | DVAR IDENTIFIER . ASSGNOP $@6 value comma_not $@7 declarations
+
+    ASSGNOP  shift, and go to state 18
+    ";"      shift, and go to state 15
+
+    $default  reduce using rule 20 (comma_not)
+
+    comma_not  go to state 19
+
+
+State 13
+
+    3 commands: command ';' . commands
+
+    DLET    shift, and go to state 4
+    DCONST  shift, and go to state 5
+    DVAR    shift, and go to state 6
+
+    ';'       reduce using rule 6 (declarations)
+    $default  reduce using rule 4 (commands)
+
+    commands      go to state 20
+    command       go to state 8
+    declarations  go to state 9
+
+
+State 14
+
+   13 declarations: DLET IDENTIFIER ASSGNOP . $@4 value comma_not $@5 declarations
+
+    $default  reduce using rule 11 ($@4)
+
+    $@4  go to state 21
+
+
+State 15
+
+   21 comma_not: ";" .
+
+    $default  reduce using rule 21 (comma_not)
+
+
+State 16
+
+    8 declarations: DLET IDENTIFIER comma_not . $@2 declarations
+
+    $default  reduce using rule 7 ($@2)
+
+    $@2  go to state 22
+
+
+State 17
+
+   19 declarations: DCONST IDENTIFIER ASSGNOP . $@8 value comma_not $@9 declarations
+
+    $default  reduce using rule 17 ($@8)
+
+    $@8  go to state 23
+
+
+State 18
+
+   16 declarations: DVAR IDENTIFIER ASSGNOP . $@6 value comma_not $@7 declarations
+
+    $default  reduce using rule 14 ($@6)
+
+    $@6  go to state 24
+
+
+State 19
+
+   10 declarations: DVAR IDENTIFIER comma_not . $@3 declarations
+
+    $default  reduce using rule 9 ($@3)
+
+    $@3  go to state 25
+
+
+State 20
+
+    3 commands: command ';' commands .
+
+    $default  reduce using rule 3 (commands)
+
+
+State 21
+
+   13 declarations: DLET IDENTIFIER ASSGNOP $@4 . value comma_not $@5 declarations
+
+    VSTR        shift, and go to state 26
+    VBOOL       shift, and go to state 27
+    VINT        shift, and go to state 28
+    VFLOAT      shift, and go to state 29
+    IDENTIFIER  shift, and go to state 30
+
+    value  go to state 31
+    exp    go to state 32
+
+
+State 22
+
+    8 declarations: DLET IDENTIFIER comma_not $@2 . declarations
+
+    DLET    shift, and go to state 4
+    DCONST  shift, and go to state 5
+    DVAR    shift, and go to state 6
+
+    $default  reduce using rule 6 (declarations)
+
+    declarations  go to state 33
+
+
+State 23
+
+   19 declarations: DCONST IDENTIFIER ASSGNOP $@8 . value comma_not $@9 declarations
+
+    VSTR        shift, and go to state 26
+    VBOOL       shift, and go to state 27
+    VINT        shift, and go to state 28
+    VFLOAT      shift, and go to state 29
+    IDENTIFIER  shift, and go to state 30
+
+    value  go to state 34
+    exp    go to state 32
+
+
+State 24
+
+   16 declarations: DVAR IDENTIFIER ASSGNOP $@6 . value comma_not $@7 declarations
+
+    VSTR        shift, and go to state 26
+    VBOOL       shift, and go to state 27
+    VINT        shift, and go to state 28
+    VFLOAT      shift, and go to state 29
+    IDENTIFIER  shift, and go to state 30
+
+    value  go to state 35
+    exp    go to state 32
+
+
+State 25
+
+   10 declarations: DVAR IDENTIFIER comma_not $@3 . declarations
+
+    DLET    shift, and go to state 4
+    DCONST  shift, and go to state 5
+    DVAR    shift, and go to state 6
+
+    $default  reduce using rule 6 (declarations)
+
+    declarations  go to state 36
+
+
+State 26
+
+   22 value: VSTR .
+
+    $default  reduce using rule 22 (value)
+
+
+State 27
+
+   23 value: VBOOL .
+
+    $default  reduce using rule 23 (value)
+
+
+State 28
+
+   25 exp: VINT .
+
+    $default  reduce using rule 25 (exp)
+
+
+State 29
+
+   26 exp: VFLOAT .
+
+    $default  reduce using rule 26 (exp)
+
+
+State 30
+
+   27 exp: IDENTIFIER .
+
+    $default  reduce using rule 27 (exp)
+
+
+State 31
+
+   13 declarations: DLET IDENTIFIER ASSGNOP $@4 value . comma_not $@5 declarations
+
+    ";"  shift, and go to state 15
+
+    $default  reduce using rule 20 (comma_not)
+
+    comma_not  go to state 37
+
+
+State 32
+
+   24 value: exp .
+   28 exp: exp . MAIORIGUAL exp
+   29    | exp . '<' exp
+   30    | exp . '=' exp
+   31    | exp . '>' exp
+   32    | exp . '+' exp
+   33    | exp . '-' exp
+   34    | exp . '*' exp
+   35    | exp . '/' exp
+   36    | exp . '^' exp
+
+    MAIORIGUAL  shift, and go to state 38
+    '>'         shift, and go to state 39
+    '<'         shift, and go to state 40
+    '='         shift, and go to state 41
+    '-'         shift, and go to state 42
+    '+'         shift, and go to state 43
+    '*'         shift, and go to state 44
+    '/'         shift, and go to state 45
+    '^'         shift, and go to state 46
+
+    $default  reduce using rule 24 (value)
+
+
+State 33
+
+    8 declarations: DLET IDENTIFIER comma_not $@2 declarations .
+
+    $default  reduce using rule 8 (declarations)
+
+
+State 34
+
+   19 declarations: DCONST IDENTIFIER ASSGNOP $@8 value . comma_not $@9 declarations
+
+    ";"  shift, and go to state 15
+
+    $default  reduce using rule 20 (comma_not)
+
+    comma_not  go to state 47
+
+
+State 35
+
+   16 declarations: DVAR IDENTIFIER ASSGNOP $@6 value . comma_not $@7 declarations
+
+    ";"  shift, and go to state 15
+
+    $default  reduce using rule 20 (comma_not)
+
+    comma_not  go to state 48
+
+
+State 36
+
+   10 declarations: DVAR IDENTIFIER comma_not $@3 declarations .
+
+    $default  reduce using rule 10 (declarations)
+
+
+State 37
+
+   13 declarations: DLET IDENTIFIER ASSGNOP $@4 value comma_not . $@5 declarations
+
+    $default  reduce using rule 12 ($@5)
+
+    $@5  go to state 49
+
+
+State 38
+
+   28 exp: exp MAIORIGUAL . exp
+
+    VINT        shift, and go to state 28
+    VFLOAT      shift, and go to state 29
+    IDENTIFIER  shift, and go to state 30
+
+    exp  go to state 50
+
+
+State 39
+
+   31 exp: exp '>' . exp
+
+    VINT        shift, and go to state 28
+    VFLOAT      shift, and go to state 29
+    IDENTIFIER  shift, and go to state 30
+
+    exp  go to state 51
+
+
+State 40
+
+   29 exp: exp '<' . exp
+
+    VINT        shift, and go to state 28
+    VFLOAT      shift, and go to state 29
+    IDENTIFIER  shift, and go to state 30
+
+    exp  go to state 52
+
+
+State 41
+
+   30 exp: exp '=' . exp
+
+    VINT        shift, and go to state 28
+    VFLOAT      shift, and go to state 29
+    IDENTIFIER  shift, and go to state 30
+
+    exp  go to state 53
+
+
+State 42
+
+   33 exp: exp '-' . exp
+
+    VINT        shift, and go to state 28
+    VFLOAT      shift, and go to state 29
+    IDENTIFIER  shift, and go to state 30
+
+    exp  go to state 54
+
+
+State 43
+
+   32 exp: exp '+' . exp
+
+    VINT        shift, and go to state 28
+    VFLOAT      shift, and go to state 29
+    IDENTIFIER  shift, and go to state 30
+
+    exp  go to state 55
+
+
+State 44
+
+   34 exp: exp '*' . exp
+
+    VINT        shift, and go to state 28
+    VFLOAT      shift, and go to state 29
+    IDENTIFIER  shift, and go to state 30
+
+    exp  go to state 56
+
+
+State 45
+
+   35 exp: exp '/' . exp
+
+    VINT        shift, and go to state 28
+    VFLOAT      shift, and go to state 29
+    IDENTIFIER  shift, and go to state 30
+
+    exp  go to state 57
+
+
+State 46
+
+   36 exp: exp '^' . exp
+
+    VINT        shift, and go to state 28
+    VFLOAT      shift, and go to state 29
+    IDENTIFIER  shift, and go to state 30
+
+    exp  go to state 58
+
+
+State 47
+
+   19 declarations: DCONST IDENTIFIER ASSGNOP $@8 value comma_not . $@9 declarations
+
+    $default  reduce using rule 18 ($@9)
+
+    $@9  go to state 59
+
+
+State 48
+
+   16 declarations: DVAR IDENTIFIER ASSGNOP $@6 value comma_not . $@7 declarations
+
+    $default  reduce using rule 15 ($@7)
+
+    $@7  go to state 60
+
+
+State 49
+
+   13 declarations: DLET IDENTIFIER ASSGNOP $@4 value comma_not $@5 . declarations
+
+    DLET    shift, and go to state 4
+    DCONST  shift, and go to state 5
+    DVAR    shift, and go to state 6
+
+    $default  reduce using rule 6 (declarations)
+
+    declarations  go to state 61
+
+
+State 50
+
+   28 exp: exp . MAIORIGUAL exp
+   28    | exp MAIORIGUAL exp .
+   29    | exp . '<' exp
+   30    | exp . '=' exp
+   31    | exp . '>' exp
+   32    | exp . '+' exp
+   33    | exp . '-' exp
+   34    | exp . '*' exp
+   35    | exp . '/' exp
+   36    | exp . '^' exp
+
+    '-'  shift, and go to state 42
+    '+'  shift, and go to state 43
+    '*'  shift, and go to state 44
+    '/'  shift, and go to state 45
+    '^'  shift, and go to state 46
+
+    $default  reduce using rule 28 (exp)
+
+
+State 51
+
+   28 exp: exp . MAIORIGUAL exp
+   29    | exp . '<' exp
+   30    | exp . '=' exp
+   31    | exp . '>' exp
+   31    | exp '>' exp .
+   32    | exp . '+' exp
+   33    | exp . '-' exp
+   34    | exp . '*' exp
+   35    | exp . '/' exp
+   36    | exp . '^' exp
+
+    '-'  shift, and go to state 42
+    '+'  shift, and go to state 43
+    '*'  shift, and go to state 44
+    '/'  shift, and go to state 45
+    '^'  shift, and go to state 46
+
+    $default  reduce using rule 31 (exp)
+
+
+State 52
+
+   28 exp: exp . MAIORIGUAL exp
+   29    | exp . '<' exp
+   29    | exp '<' exp .
+   30    | exp . '=' exp
+   31    | exp . '>' exp
+   32    | exp . '+' exp
+   33    | exp . '-' exp
+   34    | exp . '*' exp
+   35    | exp . '/' exp
+   36    | exp . '^' exp
+
+    '-'  shift, and go to state 42
+    '+'  shift, and go to state 43
+    '*'  shift, and go to state 44
+    '/'  shift, and go to state 45
+    '^'  shift, and go to state 46
+
+    $default  reduce using rule 29 (exp)
+
+
+State 53
+
+   28 exp: exp . MAIORIGUAL exp
+   29    | exp . '<' exp
+   30    | exp . '=' exp
+   30    | exp '=' exp .
+   31    | exp . '>' exp
+   32    | exp . '+' exp
+   33    | exp . '-' exp
+   34    | exp . '*' exp
+   35    | exp . '/' exp
+   36    | exp . '^' exp
+
+    '-'  shift, and go to state 42
+    '+'  shift, and go to state 43
+    '*'  shift, and go to state 44
+    '/'  shift, and go to state 45
+    '^'  shift, and go to state 46
+
+    $default  reduce using rule 30 (exp)
+
+
+State 54
+
+   28 exp: exp . MAIORIGUAL exp
+   29    | exp . '<' exp
+   30    | exp . '=' exp
+   31    | exp . '>' exp
+   32    | exp . '+' exp
+   33    | exp . '-' exp
+   33    | exp '-' exp .
+   34    | exp . '*' exp
+   35    | exp . '/' exp
+   36    | exp . '^' exp
+
+    '*'  shift, and go to state 44
+    '/'  shift, and go to state 45
+    '^'  shift, and go to state 46
+
+    $default  reduce using rule 33 (exp)
+
+
+State 55
+
+   28 exp: exp . MAIORIGUAL exp
+   29    | exp . '<' exp
+   30    | exp . '=' exp
+   31    | exp . '>' exp
+   32    | exp . '+' exp
+   32    | exp '+' exp .
+   33    | exp . '-' exp
+   34    | exp . '*' exp
+   35    | exp . '/' exp
+   36    | exp . '^' exp
+
+    '*'  shift, and go to state 44
+    '/'  shift, and go to state 45
+    '^'  shift, and go to state 46
+
+    $default  reduce using rule 32 (exp)
+
+
+State 56
+
+   28 exp: exp . MAIORIGUAL exp
+   29    | exp . '<' exp
+   30    | exp . '=' exp
+   31    | exp . '>' exp
+   32    | exp . '+' exp
+   33    | exp . '-' exp
+   34    | exp . '*' exp
+   34    | exp '*' exp .
+   35    | exp . '/' exp
+   36    | exp . '^' exp
+
+    '^'  shift, and go to state 46
+
+    $default  reduce using rule 34 (exp)
+
+
+State 57
+
+   28 exp: exp . MAIORIGUAL exp
+   29    | exp . '<' exp
+   30    | exp . '=' exp
+   31    | exp . '>' exp
+   32    | exp . '+' exp
+   33    | exp . '-' exp
+   34    | exp . '*' exp
+   35    | exp . '/' exp
+   35    | exp '/' exp .
+   36    | exp . '^' exp
+
+    '^'  shift, and go to state 46
+
+    $default  reduce using rule 35 (exp)
+
+
+State 58
+
+   28 exp: exp . MAIORIGUAL exp
+   29    | exp . '<' exp
+   30    | exp . '=' exp
+   31    | exp . '>' exp
+   32    | exp . '+' exp
+   33    | exp . '-' exp
+   34    | exp . '*' exp
+   35    | exp . '/' exp
+   36    | exp . '^' exp
+   36    | exp '^' exp .
+
+    $default  reduce using rule 36 (exp)
+
+
+State 59
+
+   19 declarations: DCONST IDENTIFIER ASSGNOP $@8 value comma_not $@9 . declarations
+
+    DLET    shift, and go to state 4
+    DCONST  shift, and go to state 5
+    DVAR    shift, and go to state 6
+
+    $default  reduce using rule 6 (declarations)
+
+    declarations  go to state 62
+
+
+State 60
+
+   16 declarations: DVAR IDENTIFIER ASSGNOP $@6 value comma_not $@7 . declarations
+
+    DLET    shift, and go to state 4
+    DCONST  shift, and go to state 5
+    DVAR    shift, and go to state 6
+
+    $default  reduce using rule 6 (declarations)
+
+    declarations  go to state 63
+
+
+State 61
+
+   13 declarations: DLET IDENTIFIER ASSGNOP $@4 value comma_not $@5 declarations .
+
+    $default  reduce using rule 13 (declarations)
+
+
+State 62
+
+   19 declarations: DCONST IDENTIFIER ASSGNOP $@8 value comma_not $@9 declarations .
+
+    $default  reduce using rule 19 (declarations)
+
+
+State 63
+
+   16 declarations: DVAR IDENTIFIER ASSGNOP $@6 value comma_not $@7 declarations .
+
+    $default  reduce using rule 16 (declarations)
