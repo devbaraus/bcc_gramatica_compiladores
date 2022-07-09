@@ -11,7 +11,7 @@ typedef struct VAR {
 	struct VAR *next;
 } VAR;
 
-VAR *MakeVAR(char *, int, VAR *);
+VAR *MakeVAR(char *, VAR *);
 VAR *FindVAR(char *);
 VAR *DestruirVAR();
 const char* TypeName(int x);

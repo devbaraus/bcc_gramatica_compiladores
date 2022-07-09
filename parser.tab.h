@@ -48,13 +48,22 @@ extern int yydebug;
     DLET = 258,
     DCONST = 259,
     DVAR = 260,
-    VSTR = 261,
-    VBOOL = 262,
+    DFUNC = 261,
+    VSTR = 262,
     VINT = 263,
-    VFLOAT = 264,
-    IDENTIFIER = 265,
-    ASSGNOP = 266,
-    MAIORIGUAL = 267
+    VBOOL = 264,
+    VFLOAT = 265,
+    IDENTIFIER = 266,
+    CIF = 267,
+    CELSE = 268,
+    ASSGNOP = 269,
+    EXPGT = 270,
+    EXPLT = 271,
+    EXPEQ = 272,
+    EXPDF = 273,
+    NULLCOALESCING = 274,
+    LOGOR = 275,
+    LOGAND = 276
   };
 #endif
 
@@ -63,14 +72,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 25 "parser.y" /* yacc.c:1909  */
+#line 19 "parser.y" /* yacc.c:1909  */
 
-	int   yint;// 1
-	int ybool; //2
-	float yfloat; //3
 	char* ystr; //4
 
-#line 74 "parser.tab.h" /* yacc.c:1909  */
+#line 80 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

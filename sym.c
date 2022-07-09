@@ -28,11 +28,10 @@ const char* TypeName(int x){
 	if(x == ARR) return "list";
 }
 
-VAR *MakeVAR(char *name, int type, VAR *next) {
+VAR *MakeVAR(char *name, VAR *next) {
 	VAR *p;
 	p = NEW(VAR);
 	p->name = name;
-	p->type = type;
 	p->scope = global_scope;
 	p->next = next;
 	return p;

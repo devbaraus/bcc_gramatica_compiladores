@@ -2,167 +2,171 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "sym.h"
-//#include <time.h>
-//#include <stdlib.h>
-
 #include <string.h>
+
 extern int yylineno;
 extern int global_scope;
 extern VAR *SymTab;
+
 FILE * output;
-#define UNDECL  0
-#define INT     1
-#define BOOL    2
-#define FLT     3
-#define STR     4
-#define ARR		5
-#define AddVAR(n,t) SymTab=MakeVAR(n,t,SymTab)
+
+#define AddVAR(n) SymTab=MakeVAR(n,SymTab)
 #define ASSERT(x,y) if((x)) printf("%s on line %d\n",(y),yylineno)
 %}
 
-//%define parse.error verbose //aparecer mais detalhes dos erros
+%define parse.error verbose //aparecer mais detalhes dos erros
 //docker run  -it  -v "%cd%":/usr/src  phdcoder/flexbison
 %union {
-	int   yint;// 1
-	int ybool; //2
-	float yfloat; //3
 	char* ystr; //4
 }
 
-%start program
-%token DLET DCONST DVAR VSTR VBOOL
-%token <yint> VINT
-%token <yfloat> VFLOAT
-%token <ystr> IDENTIFIER
-%token ASSGNOP MAIORIGUAL
-%left '>' '<' '=' MAIORIGUAL
+%start goal
+%token DLET DCONST DVAR DFUNC
+%token <ystr> VSTR VINT VBOOL VFLOAT IDENTIFIER
+%token <ystr> CIF CELSE
+%token ASSGNOP EXPGT EXPLT EXPEQ EXPDF NULLCOALESCING LOGOR LOGAND
+%left '?' ':' LOGOR LOGAND NULLCOALESCING
+%left '>' '<' '=' EXPGT EXPLT EXPEQ EXPDF
 %left '-' '+'
 %left '*' '/'
 %left '^'
 
-%type  <yint>  exp
-%type  <yint>  value
+%type <ystr>  program
+%type <ystr> conditional
+%type <ystr> expression statement declarations assigns value 
+%type <ystr> anonymFunction funcArgsNull funcArgs
+// %type <ystr> flowcontrol
 %%
 
-program : {} commands
+goal: program {}
+
+
+program : program statement
+| statement
 ;
 
-commands : command ';' commands | /* ε */ ;
-
-command : declarations 
+statement: assigns
+| declarations
+| conditional
 ;
 
-declarations:  /* ε */
-| DLET IDENTIFIER comma_not {
+declarations: DLET IDENTIFIER {
 	VAR *p = FindVAR($2);
-	ASSERT((p!=NULL), "Identificador já declarado");
-	AddVAR($2,UNDECL);
+	// ASSERT((p!=NULL), "Identificador já declarado");
+	AddVAR($2);
 	fprintf(output, "%s = None\n", $2);
-} declarations 
-| DVAR IDENTIFIER comma_not {
+	char t[1000]; sprintf(t, "%s = None\n", $2); $$= t;
+} 
+| DVAR IDENTIFIER {
 	VAR *p = FindVAR($2);
-	ASSERT((p!=NULL), "Identificador já declarado");
-	AddVAR($2,UNDECL);
+	// ASSERT((p!=NULL), "Identificador já declarado");
+	AddVAR($2);
 	fprintf(output, "%s = None\n", $2);
-} declarations
-| DLET IDENTIFIER ASSGNOP {
-	fprintf(output, "%s = ", $2);
-} value comma_not {
+	char t[1000]; sprintf(t, "%s = None\n", $2); $$=t;
+}
+| DLET IDENTIFIER ASSGNOP assigns {
 	VAR *p = FindVAR($2);
-	ASSERT((p!=NULL), "Identificador já declarado");
-	AddVAR($2, $5);
-	fprintf(output, "\n");
-} declarations 
-| DVAR IDENTIFIER ASSGNOP {
-	fprintf(output, "%s = ", $2);
-} value comma_not {
+	// ASSERT((p!=NULL), "Identificador já declarado");
+	AddVAR($2);
+	fprintf(output, "%s = %s\n", $2, $4);
+	char t[1000]; sprintf(t, "%s = %s\n", $2, $4); $$=t;
+} 
+| DVAR IDENTIFIER ASSGNOP assigns {
 	VAR *p = FindVAR($2);
-	ASSERT((p!=NULL), "Identificador já declarado");
-	AddVAR($2, $5);
-	fprintf(output, "\n");
-} declarations
-| DCONST IDENTIFIER ASSGNOP {
-	fprintf(output, "%s = ", $2);
-} value comma_not {
+	// ASSERT((p!=NULL), "Identificador já declarado");
+	AddVAR($2);
+	fprintf(output, "%s = %s\n", $2, $4);
+	char t[1000]; sprintf(t, "%s = %s\n", $2, $4); $$=t;
+}
+| DCONST IDENTIFIER ASSGNOP assigns {
 	VAR *p = FindVAR($2);
-	ASSERT((p!=NULL), "Identificador já declarado");
-	AddVAR($2, $5);
-	fprintf(output, "\n");
-} declarations
+	// ASSERT((p!=NULL), "Identificador já declarado");
+	AddVAR($2);
+	fprintf(output, "%s = %s\n", $2, $4);
+	char t[1000]; sprintf(t, "%s = %s\n", $2, $4); $$=t;
+}
+// | DLET IDENTIFIER ASSGNOP anonymFunction {
+// 	VAR *p = FindVAR($2);
+// 	// ASSERT((p!=NULL), "Identificador já declarado");
+// 	AddVAR($2);
+// 	char t[1000]; sprintf(t, "def %s %s\n", $2, $4); $$=t;
+// 	fprintf(output, "%s", t);
+// } 
+| DVAR IDENTIFIER ASSGNOP anonymFunction {
+	VAR *p = FindVAR($2);
+	// ASSERT((p!=NULL), "Identificador já declarado");
+	AddVAR($2);
+	char t[1000]; sprintf(t, "def %s %s\n", $2, $4); $$=t;
+	fprintf(output, "def %s %s\n", $2, $4);
+
+}
+| DCONST IDENTIFIER ASSGNOP anonymFunction {
+	VAR *p = FindVAR($2);
+	// ASSERT((p!=NULL), "Identificador já declarado");
+	AddVAR($2);
+	char t[1000]; sprintf(t, "def %s %s\n", $2, $4); $$=t;
+	fprintf(output, "def %s %s\n", $2, $4);
+
+}
 ;
 
-comma_not: 
-| ";"
+conditional: CIF '(' assigns ')' '{' { 
+	fprintf(output, "if %s :\n\t",$3);
+} statement '}' conditionalElse
+
+conditionalElse: 
+| CELSE '{' { 
+	fprintf(output, "else:\n\t");
+} statement '}'
+| CELSE CIF '(' assigns ')' '{' { 
+	fprintf(output, "elif %s :\n\t",$4);
+} statement '}' conditionalElse
 ;
 
-value: VSTR { $$= STR; fprintf(output, "%s", $1); }
-| VBOOL { $$= BOOL; fprintf(output, "%s", $1 == "true" ? "True" : "False"); }
-| exp
+anonymFunction: DFUNC '(' funcArgsNull ')' '{' statement '}' { 
+	char t[1000]; 
+	sprintf(t, "( %s ): \n\t%s", $3, $6); 
+	$$= t; 
+	fprintf(output, "( %s ): \n\t%s", $3, $6); } 
+; 
+
+funcArgsNull: { $$ = ""; }
+| funcArgs { $$ = $1; }
+| IDENTIFIER ',' funcArgs { char t[1000]; sprintf(t, "%s ,", $1); $$=t; } 
 ;
 
-exp: VINT { $$= INT; fprintf(output, "%d", $1); }
-| VFLOAT { $$= FLT; fprintf(output, "%f", $1); }
-| IDENTIFIER  {  
-	VAR *p=FindVAR($1);
-	ASSERT(p==NULL,"Identificador Não declarado");
-	$$= (p!=NULL) ? p->type : UNDECL;  
-}
-| exp MAIORIGUAL exp {  
-	ASSERT(($1== INT || $1== FLT) && ($3== INT || $3== FLT), "Operadores devem ser INT ou FLT");
-    $$= BOOL;  
-}
-| exp '<' exp  { 
-	ASSERT(  ($1== INT || $1== FLT) && ($3== INT || $3== FLT) , "Operadores devem ser INT ou FLT");
-    $$= BOOL;
-}
-| exp '=' exp  {  
-	ASSERT(  ($1== INT || $1== FLT) && ($3== INT || $3== FLT)  , "Operadores devem ser INT ou FLT");
-    $$= BOOL; 
-}
-| exp '>' exp  { 
-	ASSERT(  ($1== INT || $1== FLT) && ($3== INT || $3== FLT)  , "Operadores devem ser INT ou FLT");
-    $$= BOOL;  
-}
-| exp '+' exp  {   
-	ASSERT(  ($1== INT || $1== FLT) && ($3== INT || $3== FLT)  , "Operadores devem ser INT ou FLT");
-	if ($1==FLT || $3==FLT){
-		$$= FLT;
-	} else {
-		$$= INT;
-	}
-}
-| exp '-' exp  { 
-	ASSERT(  ($1== INT || $1== FLT) && ($3== INT || $3== FLT)  , "Operadores devem ser INT ou FLT");
-	if ($1==FLT || $3==FLT){
-		$$= FLT;
-	} else {
-		$$= INT;
-	}
-}
-| exp '*' exp  { 
-	ASSERT(  ($1== INT || $1== FLT) && ($3== INT || $3== FLT)  , "Operadores devem ser INT ou FLT");
-	if ($1==FLT || $3==FLT){
-		$$= FLT;
-	} else {
-		$$= INT;
-	}
-}
-| exp '/' exp  { 
-	ASSERT(  ($1== INT || $1== FLT) && ($3== INT || $3== FLT)  , "Operadores devem ser INT ou FLT");
-	if ($1==FLT || $3==FLT){
-		$$= FLT;
-	} else {
-		$$= INT;
-	}
-}
-| exp '^' exp  { 
-	ASSERT(  ($1== INT || $1== FLT) && ($3== INT || $3== FLT)  , "Operadores devem ser INT ou FLT");
-	if ($1==FLT || $3==FLT){
-		$$= FLT;
-	} else {
-		$$= INT;
-	}
-}
+funcArgs: IDENTIFIER { $$ = $1; }
+| IDENTIFIER ',' funcArgs { char t[1000]; sprintf(t, "%s ,", $1); $$=t; } 
+;
+
+assigns: value NULLCOALESCING value { char t[1000]; sprintf(t, "%s or %s", $1, $3); $$=t; }
+| value '?' value ':' value { char t[1000]; sprintf(t, "%s if %s else %s", $3, $1, $5); $$=t; }
+| value { $$ = $1; }
+;
+
+value: VSTR { $$ = $1; }
+| VBOOL { $$ = $1 == "true" ? "True" : "False"; }
+// | "["  "]" { $$=ARR; fprintf(output, "[ %s ]", $2);}
+| expression
+;
+
+
+expression: VINT { $$= $1;  }
+| VFLOAT { $$= $1; }
+| IDENTIFIER  {	VAR *p=FindVAR($1);	ASSERT(p==NULL,"Identificador Não declarado"); $$= $1; }
+| expression LOGAND expression { char t[1000]; sprintf(t, "%s and %s", $1, $3); $$=t; }
+| expression LOGOR expression { char t[1000]; sprintf(t, "%s or %s", $1, $3); $$=t; }
+| expression EXPGT expression { char t[1000]; sprintf(t, "%s >= %s", $1, $3); $$=t; }
+| expression EXPLT expression { char t[1000]; sprintf(t, "%s <= %s", $1, $3); $$=t; }
+| expression EXPEQ expression { char t[1000]; sprintf(t, "%s == %s", $1, $3); $$=t; }
+| expression EXPDF expression { char t[1000]; sprintf(t, "%s != %s", $1, $3); $$=t; }
+| expression '<' expression { char t[1000]; sprintf(t, "%s < %s", $1, $3); $$=t; }
+| expression '>' expression { char t[1000]; sprintf(t, "%s > %s", $1, $3); $$=t; }
+| expression '+' expression { char t[1000]; sprintf(t, "%s + %s", $1, $3); $$=t; }
+| expression '-' expression { char t[1000]; sprintf(t, "%s - %s", $1, $3); $$=t; }
+| expression '*' expression { char t[1000]; sprintf(t, "%s * %s", $1, $3); $$=t; }
+| expression '/' expression { char t[1000]; sprintf(t, "%s / %s", $1, $3); $$=t; }
+| expression '^' expression { char t[1000]; sprintf(t, "%s ^ %s", $1, $3); $$=t; }
 ;
 
 
@@ -171,7 +175,7 @@ exp: VINT { $$= INT; fprintf(output, "%d", $1); }
 main( int argc, char *argv[] ) {
 	output = fopen("output.py","w");
 	init_stringpool(10000); //memória que vai guardar as strings
-	if ( yyparse () == 0) printf("\ncodigo sem erros");
+	if ( yyparse () == 0) printf("\n\n ----- Code without errors ----- \n\n");
 }
 
 yyerror(char *s) { /* Called by yyparse on error */

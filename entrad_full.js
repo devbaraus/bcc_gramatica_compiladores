@@ -86,3 +86,13 @@ const helloNice = () => {
     let t = [];
     let k = [1, 2, 4, 5, 6];
 }
+
+const helloFuck = function () {
+    let nice = " adwwdw ";
+    let hello;
+    var kek = 3.6;
+    const top = 2;
+    const toper = false;
+    let t = [];
+    let k = [1, 2, 4, 5, 6];
+}
