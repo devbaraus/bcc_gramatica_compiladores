@@ -9,13 +9,6 @@ extern VAR *SymTab;
 
 FILE * output;
 
-void ScopeTab(){
-	int i;
-	for(i = 0; i < global_scope; i++){ 
-		fprintf(output, "\t");
-	}
-}
-
 #define AddVAR(n) SymTab=MakeVAR(n,SymTab)
 #define ASSERT(x,y) if((x)) printf("%s on line %d\n",(y),yylineno)
 %}
@@ -27,7 +20,7 @@ void ScopeTab(){
 }
 
 %start goal
-%token DLET DCONST DVAR DFUNC DAFUNC
+%token DLET DCONST DVAR DFUNC
 %token <ystr> VSTR VINT VBOOL VFLOAT IDENTIFIER
 %token <ystr> CIF CELSE
 %token ASSGNOP EXPGT EXPLT EXPEQ EXPDF NULLCOALESCING LOGOR LOGAND
@@ -39,6 +32,7 @@ void ScopeTab(){
 %left '^'
 
 %type <ystr> program
+%type <ystr> conditional
 %type <ystr> expression
 %type <ystr> assigns
 %type <ystr> statement
@@ -50,16 +44,16 @@ void ScopeTab(){
 // %type <ystr> flowcontrol
 %%
 
-goal: program { global_scope = 0; }
+goal: program {}
 
 
 program : statement
 | statement program
 ;
 
-statement: assigns { if($1 != ""){ ScopeTab(); fprintf(output, "%s\n", $1);} }
-| declarations { if($1 != ""){ ScopeTab(); fprintf(output, "%s\n", $1);}}
-| conditional { $$=""; }
+statement: assigns { if($1 != "") fprintf(output, "%s\n", $1); }
+| declarations {  if($1 != "") fprintf(output, "%s\n", $1); }
+| conditional { if($1 != "") fprintf(output, "%s\n", $1); }
 ;
 
 declarations: DLET IDENTIFIER {
@@ -69,109 +63,73 @@ declarations: DLET IDENTIFIER {
 	char t[1000]; sprintf(t, "%s = None", $2); $$=t;
 } 
 | DVAR IDENTIFIER {
-	char t[1000]; 
-	sprintf(t, "%s = None", $2); 
-	$$=t;
+	// VAR *p = FindVAR($2);
+	// ASSERT((p!=NULL), "Identificador já declarado");
+	// AddVAR($2);
+	char t[1000]; sprintf(t, "%s = None", $2); $$=t;
 }
 | DLET IDENTIFIER ASSGNOP assigns {	
-	char t[1000];
-	char w[1000];  
-	sprintf(t, "%s =", $2); 
-	sprintf(w, "%s", $4); 
-	sprintf(t, "%s %s", t, w);
-	$$=stringpool(t);
+	char t[1000]; 
+	sprintf(t, "%s = %s", $2, $4); 
+	$$=t;
 } 
 | DVAR IDENTIFIER ASSGNOP assigns {
-	char t[1000];
-	char w[1000];  
-	sprintf(t, "%s =", $2); 
-	sprintf(w, "%s", $4); 
-	sprintf(t, "%s %s", t, w);
-	$$=t;
+	// VAR *p = FindVAR($2);
+	// ASSERT((p!=NULL), "Identificador já declarado");
+	// AddVAR($2);
+	char t[1000]; sprintf(t, "%s = %s", $2, $4); $$=t;
 }
 | DCONST IDENTIFIER ASSGNOP assigns {
-	char t[1000];
-	char w[1000];  
-	sprintf(t, "%s =", $2); 
-	sprintf(w, "%s", $4); 
-	sprintf(t, "%s %s", t, w);
-	$$=t;
-}
-| IDENTIFIER ASSGNOP assigns {	
-	char t[1000];
-	char w[1000];  
-	sprintf(t, "%s =", $1); 
-	sprintf(w, "%s", $3); 
-	sprintf(t, "%s %s", t, w);
-	$$=t;
+	VAR *p = FindVAR($2);
+	// ASSERT((p!=NULL), "Identificador já declarado");
+	AddVAR($2);
+	char t[1000]; sprintf(t, "%s = %s", $2, $4); $$=t;
 }
 | DCONST IDENTIFIER ASSGNOP {
+	VAR *p = FindVAR($2);
+	// ASSERT((p!=NULL), "Identificador já declarado");
+	AddVAR($2);
 	fprintf(output, "def %s", $2);
 } anonymFunction { $$ = ""; }
-| DFUNC IDENTIFIER '(' { 
-	fprintf(output, "def %s(", $2);
-} funcArgsNull ')' '{'  { 
-	fprintf(output, "):\n");
-	global_scope += 1;
-} program '}' { 
-	$$ = "";
-	global_scope -= 1;
+| IDENTIFIER ASSGNOP assigns {	
+	char t[1000]; 
+	sprintf(t, "%s = %s",$1, $3); 
+	$$=t;
 }
 ;
 
-anonymFunction: DFUNC '(' { 
-	fprintf(output, "(");
-} funcArgsNull ')' '{' { 
-	fprintf(output, "):\n");
-	global_scope += 1; 
-} program '}' { 
-	global_scope -= 1; 
-	$$ = "";
-}
-| '(' funcArgsNull ')' DAFUNC '{'  { 
-	fprintf(output, "(%s):\n", $2);
-	global_scope += 1; 
-} program '}' { 
-	$$ = "";
-	global_scope -= 1; 
-}
+conditional: CIF '(' assigns ')' '{' { 
+	fprintf(output, "if %s :\n\t",$3);
+} statement '}' conditionalElse
+
+conditionalElse: 
+| CELSE '{' { 
+	fprintf(output, "else:\n\t");
+} statement '}'
+| CELSE CIF '(' assigns ')' '{' { 
+	fprintf(output, "elif %s :\n\t",$4);
+} statement '}' conditionalElse
+;
+
+anonymFunction: DFUNC '(' funcArgsNull ')' { 
+	// char t[1000]; 
+	// sprintf(t, "%s", $3); 
+	// $$= t; 
+	fprintf(output, "( %s ): \n\t", $3);
+} '{' program '}' { $$ = "";}
+// | '(' funcArgsNull ')' '=>' '{' statement '}' { 
+// 	char t[1000]; 
+// 	sprintf(t, "( %s ): \n\t%s", $3, $6); 
+// 	$$= t; 
+// 	fprintf(output, "( %s ): \n\t%s", $3, $6); } 
 ; 
 
 funcArgsNull: { $$ = ""; }
 | funcArgs { char t[1000]; sprintf(t, "%s", $1); $$=t; } 
 ;
 
-funcArgs: IDENTIFIER { $$ = $1; fprintf(output, "%s", $1);}
-| IDENTIFIER  {	
-	fprintf(output, "%s", $1);
-} ','  {	
-	fprintf(output, ",");
-} funcArgs
-;
-
-conditional: CIF '(' assigns ')' '{' { 
-	ScopeTab();
-	fprintf(output, "if %s:\n", $3); 
-	global_scope += 1;
-} program {
-	global_scope -= 1;
-} '}' conditionalElse
-
-conditionalElse:
-| CELSE '{' { 
-	ScopeTab();
-	fprintf(output, "else:\n");
-	global_scope += 1;
-} program {
-	global_scope -= 1;
-} '}' 
-| CELSE CIF '(' assigns ')' '{' { 
-	ScopeTab();
-	fprintf(output, "elif %s:\n",$4);
-	global_scope += 1;
-} program {
-	global_scope -= 1;
-} '}' conditionalElse
+funcArgs: IDENTIFIER { $$ = $1; }
+| IDENTIFIER ','  funcArgs { char t[1000]; sprintf(t, "%s, %s", $1, $3); $$=t; }
 ;
 
 assigns: value { $$ = $1; }
@@ -180,7 +138,7 @@ assigns: value { $$ = $1; }
 ;
 
 value: VSTR { $$ = $1; }
-| VBOOL { $$ = $1 == stringpool("true") ? "True" : "False"; }
+| VBOOL { $$ = $1 == "true" ? "True" : "False"; }
 | expression { $$ = $1; }
 ;
 
@@ -207,12 +165,12 @@ expression: VINT { $$= $1;  }
 
 %%
 
-int main( int argc, char *argv[] ) {
+main( int argc, char *argv[] ) {
 	output = fopen("output.py","w");
 	init_stringpool(10000); //memória que vai guardar as strings
 	if ( yyparse () == 0) printf("\n\n ----- Code without errors ----- \n\n");
 }
 
-int yyerror(char *s) { /* Called by yyparse on error */
+yyerror(char *s) { /* Called by yyparse on error */
 	printf ("\n%s on line %d\n", s, yylineno );
 }

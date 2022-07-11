@@ -16,6 +16,7 @@ ID       [_a-zA-Z][_A-Za-z0-9]*
 "!="                 { printf("!= "); return(EXPDF); }
 "||"                 { printf("|| "); return(LOGOR); }
 "&&"                 { printf("&& "); return(LOGAND); }
+"=>"                 { printf("=> "); return(DAFUNC); }
 "??"                 { printf("null-coalescing "); return(NULLCOALESCING); }
 "\""[_A-Za-z0-9 ]*"\""           { printf("string "); yylval.ystr = stringpool(yytext);  return(VSTR); }
 "\'"[_A-Za-z0-9]*"\'"          { printf("string "); yylval.ystr = stringpool(yytext);  return(VSTR); }
@@ -28,6 +29,9 @@ let                  { printf("let "); return(DLET); }
 const                { printf("const "); return(DCONST); }
 var                  { printf("var "); return(DVAR); }
 function             { printf("function "); return(DFUNC); }
+return               { printf("return "); return(FRETURN); }
+continue               { printf("return "); return(FCONTINUE); }
+break               { printf("return "); return(FBREAK); }
 {ID}                 { printf("identifier "); yylval.ystr = stringpool(yytext);  return(IDENTIFIER); }
 "\n"                 { printf("\n");}
 "//"[A-Za-z0-9_ ]* {printf("inline comment "); }

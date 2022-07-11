@@ -4,50 +4,85 @@
 */
 let nice = " adwwdw "
 let hello
-var kek = 3.6
-const top = 2
+var kek = 3.6 || true && false
+const top = true
 const toper = false
-
-let wi = 9 && 11
-let wh = 8 || 10
-let wa = 1 >= 3
+const s = false ?? "nice"
+let wa = 2 >= 4
 let wb = 2 == 4
-let wc = 3 != 5
-let wd = 4 < 6
-let we = 5 > 7
-let wf = 6 <= 8
-let wg = 7 >= 9
-
-
-
+let wc = 2 != 4
+let wd = 2 < 4
+let we = 2 > 4
+let wf = 2 <= 4
+let wg = 2 >= 4
+let wh = 2 || 4
+let wi = 2 && 4
 let xa = 2 + 4
 let xb = 2 - 4
 let xc = 2 * 4
 let xd = 2 / 4
+xd = 2 + xc
 
-const sb = 2 ?? 3
-const sa = 'if' ? 'false' : 'true'
-
-if ( "s" ) {
-    let d = 'nice'
+if (2+4) {
+  d = "kek"
 }
 
-if ( 1 == 2 ) {
-    let d = 'nice'
+if (s) {
+  d = "kek"
 } else {
-    let j = 'kkkk'
+  j = "blabla"
 }
 
-if ( 1 == 2 ) {
-    let d = 'nice'
-} else if(1 || 2) {
-    const j = 'kkkk'
-} else if(1 && 2) {
-    var j = 'kkkk'
+if (s) {
+  d = "kek"
+} else if (k) {
+  d = "topper"
 } else {
-    34 + 2
+  j = "blabla"
 }
 
-const t = function (a, b) {
-    45
+function helloWorld(a, b, c) {
+  let nice = " adwwdw "
+  let hello
+  var kek = 3.6
+  const top = 2
+  const toper = false
+
+  if (s) {
+    d = "kek"
+    if (s) {
+      d = "kek"
+      if (s) {
+        d = "kek"
+      }
+    }
+    if (s) {
+      d = "kek"
+    }
+  } else {
+    j = "blabla"
+  }  
+}
+
+const helloFuck = function (b, a, c) {
+  let nice = " adwwdw "
+  let hello
+  var kek = 3.6
+  const top = 2
+  const toper = false
+  if (s) {
+    d = "kek"
+  } else if (k) {
+    d = "topper"
+  } else {
+    j = "blabla"
+  }
+}
+
+const helloFuck = () => {
+  let nice = " adwwdw "
+  let hello
+  var kek = 3.6
+  const top = 2
+  const toper = false
 }

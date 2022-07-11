@@ -1,0 +1,1343 @@
+Terminals unused in grammar
+
+   FRETURN
+   FBREAK
+   FCONTINUE
+   '='
+   '^'
+
+
+Grammar
+
+    0 $accept: goal $end
+
+    1 goal: program
+
+    2 program: statement
+    3        | statement program
+
+    4 statement: assigns
+    5          | declarations
+    6          | conditional
+
+    7 declarations: DLET IDENTIFIER
+    8             | DVAR IDENTIFIER
+    9             | DLET IDENTIFIER ASSGNOP assigns
+   10             | DVAR IDENTIFIER ASSGNOP assigns
+   11             | DCONST IDENTIFIER ASSGNOP assigns
+
+   12 $@1: %empty
+
+   13 declarations: DCONST IDENTIFIER ASSGNOP $@1 anonymFunction
+   14             | IDENTIFIER ASSGNOP assigns
+
+   15 $@2: %empty
+
+   16 conditional: CIF '(' assigns ')' '{' $@2 statement '}' conditionalElse
+
+   17 conditionalElse: %empty
+
+   18 $@3: %empty
+
+   19 conditionalElse: CELSE '{' $@3 statement '}'
+
+   20 $@4: %empty
+
+   21 conditionalElse: CELSE CIF '(' assigns ')' '{' $@4 statement '}' conditionalElse
+
+   22 $@5: %empty
+
+   23 anonymFunction: DFUNC '(' funcArgsNull ')' $@5 '{' program '}'
+
+   24 funcArgsNull: %empty
+   25             | funcArgs
+
+   26 funcArgs: IDENTIFIER
+   27         | IDENTIFIER ',' funcArgs
+
+   28 assigns: value
+   29        | value NULLCOALESCING value
+   30        | value '?' value ':' value
+
+   31 value: VSTR
+   32      | VBOOL
+   33      | expression
+
+   34 expression: VINT
+   35           | VFLOAT
+   36           | IDENTIFIER
+   37           | expression LOGAND expression
+   38           | expression LOGOR expression
+   39           | expression EXPGT expression
+   40           | expression EXPLT expression
+   41           | expression EXPEQ expression
+   42           | expression EXPDF expression
+   43           | expression '<' expression
+   44           | expression '>' expression
+   45           | expression '+' expression
+   46           | expression '-' expression
+   47           | expression '*' expression
+   48           | expression '/' expression
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 16 21 23
+')' (41) 16 21 23
+'*' (42) 47
+'+' (43) 45
+',' (44) 27
+'-' (45) 46
+'/' (47) 48
+':' (58) 30
+'<' (60) 43
+'=' (61)
+'>' (62) 44
+'?' (63) 30
+'^' (94)
+'{' (123) 16 19 21 23
+'}' (125) 16 19 21 23
+error (256)
+DLET (258) 7 9
+DCONST (259) 11 13
+DVAR (260) 8 10
+DFUNC (261) 23
+VSTR (262) 31
+VINT (263) 34
+VBOOL (264) 32
+VFLOAT (265) 35
+IDENTIFIER (266) 7 8 9 10 11 13 14 26 27 36
+CIF (267) 16 21
+CELSE (268) 19 21
+ASSGNOP (269) 9 10 11 13 14
+EXPGT (270) 39
+EXPLT (271) 40
+EXPEQ (272) 41
+EXPDF (273) 42
+NULLCOALESCING (274) 29
+LOGOR (275) 38
+LOGAND (276) 37
+FRETURN (277)
+FBREAK (278)
+FCONTINUE (279)
+
+
+Nonterminals, with rules where they appear
+
+$accept (40)
+    on left: 0
+goal (41)
+    on left: 1, on right: 0
+program (42)
+    on left: 2 3, on right: 1 3 23
+statement (43)
+    on left: 4 5 6, on right: 2 3 16 19 21
+declarations (44)
+    on left: 7 8 9 10 11 13 14, on right: 5
+$@1 (45)
+    on left: 12, on right: 13
+conditional (46)
+    on left: 16, on right: 6
+$@2 (47)
+    on left: 15, on right: 16
+conditionalElse (48)
+    on left: 17 19 21, on right: 16 21
+$@3 (49)
+    on left: 18, on right: 19
+$@4 (50)
+    on left: 20, on right: 21
+anonymFunction (51)
+    on left: 23, on right: 13
+$@5 (52)
+    on left: 22, on right: 23
+funcArgsNull (53)
+    on left: 24 25, on right: 23
+funcArgs (54)
+    on left: 26 27, on right: 25 27
+assigns (55)
+    on left: 28 29 30, on right: 4 9 10 11 14 16 21
+value (56)
+    on left: 31 32 33, on right: 28 29 30
+expression (57)
+    on left: 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48, on right:
+    33 37 38 39 40 41 42 43 44 45 46 47 48
+
+
+State 0
+
+    0 $accept: . goal $end
+
+    DLET        shift, and go to state 1
+    DCONST      shift, and go to state 2
+    DVAR        shift, and go to state 3
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 8
+    CIF         shift, and go to state 9
+
+    goal          go to state 10
+    program       go to state 11
+    statement     go to state 12
+    declarations  go to state 13
+    conditional   go to state 14
+    assigns       go to state 15
+    value         go to state 16
+    expression    go to state 17
+
+
+State 1
+
+    7 declarations: DLET . IDENTIFIER
+    9             | DLET . IDENTIFIER ASSGNOP assigns
+
+    IDENTIFIER  shift, and go to state 18
+
+
+State 2
+
+   11 declarations: DCONST . IDENTIFIER ASSGNOP assigns
+   13             | DCONST . IDENTIFIER ASSGNOP $@1 anonymFunction
+
+    IDENTIFIER  shift, and go to state 19
+
+
+State 3
+
+    8 declarations: DVAR . IDENTIFIER
+   10             | DVAR . IDENTIFIER ASSGNOP assigns
+
+    IDENTIFIER  shift, and go to state 20
+
+
+State 4
+
+   31 value: VSTR .
+
+    $default  reduce using rule 31 (value)
+
+
+State 5
+
+   34 expression: VINT .
+
+    $default  reduce using rule 34 (expression)
+
+
+State 6
+
+   32 value: VBOOL .
+
+    $default  reduce using rule 32 (value)
+
+
+State 7
+
+   35 expression: VFLOAT .
+
+    $default  reduce using rule 35 (expression)
+
+
+State 8
+
+   14 declarations: IDENTIFIER . ASSGNOP assigns
+   36 expression: IDENTIFIER .
+
+    ASSGNOP  shift, and go to state 21
+
+    $default  reduce using rule 36 (expression)
+
+
+State 9
+
+   16 conditional: CIF . '(' assigns ')' '{' $@2 statement '}' conditionalElse
+
+    '('  shift, and go to state 22
+
+
+State 10
+
+    0 $accept: goal . $end
+
+    $end  shift, and go to state 23
+
+
+State 11
+
+    1 goal: program .
+
+    $default  reduce using rule 1 (goal)
+
+
+State 12
+
+    2 program: statement .
+    3        | statement . program
+
+    DLET        shift, and go to state 1
+    DCONST      shift, and go to state 2
+    DVAR        shift, and go to state 3
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 8
+    CIF         shift, and go to state 9
+
+    $default  reduce using rule 2 (program)
+
+    program       go to state 24
+    statement     go to state 12
+    declarations  go to state 13
+    conditional   go to state 14
+    assigns       go to state 15
+    value         go to state 16
+    expression    go to state 17
+
+
+State 13
+
+    5 statement: declarations .
+
+    $default  reduce using rule 5 (statement)
+
+
+State 14
+
+    6 statement: conditional .
+
+    $default  reduce using rule 6 (statement)
+
+
+State 15
+
+    4 statement: assigns .
+
+    $default  reduce using rule 4 (statement)
+
+
+State 16
+
+   28 assigns: value .
+   29        | value . NULLCOALESCING value
+   30        | value . '?' value ':' value
+
+    NULLCOALESCING  shift, and go to state 25
+    '?'             shift, and go to state 26
+
+    $default  reduce using rule 28 (assigns)
+
+
+State 17
+
+   33 value: expression .
+   37 expression: expression . LOGAND expression
+   38           | expression . LOGOR expression
+   39           | expression . EXPGT expression
+   40           | expression . EXPLT expression
+   41           | expression . EXPEQ expression
+   42           | expression . EXPDF expression
+   43           | expression . '<' expression
+   44           | expression . '>' expression
+   45           | expression . '+' expression
+   46           | expression . '-' expression
+   47           | expression . '*' expression
+   48           | expression . '/' expression
+
+    EXPGT   shift, and go to state 27
+    EXPLT   shift, and go to state 28
+    EXPEQ   shift, and go to state 29
+    EXPDF   shift, and go to state 30
+    LOGOR   shift, and go to state 31
+    LOGAND  shift, and go to state 32
+    '>'     shift, and go to state 33
+    '<'     shift, and go to state 34
+    '-'     shift, and go to state 35
+    '+'     shift, and go to state 36
+    '*'     shift, and go to state 37
+    '/'     shift, and go to state 38
+
+    $default  reduce using rule 33 (value)
+
+
+State 18
+
+    7 declarations: DLET IDENTIFIER .
+    9             | DLET IDENTIFIER . ASSGNOP assigns
+
+    ASSGNOP  shift, and go to state 39
+
+    $default  reduce using rule 7 (declarations)
+
+
+State 19
+
+   11 declarations: DCONST IDENTIFIER . ASSGNOP assigns
+   13             | DCONST IDENTIFIER . ASSGNOP $@1 anonymFunction
+
+    ASSGNOP  shift, and go to state 40
+
+
+State 20
+
+    8 declarations: DVAR IDENTIFIER .
+   10             | DVAR IDENTIFIER . ASSGNOP assigns
+
+    ASSGNOP  shift, and go to state 41
+
+    $default  reduce using rule 8 (declarations)
+
+
+State 21
+
+   14 declarations: IDENTIFIER ASSGNOP . assigns
+
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    assigns     go to state 43
+    value       go to state 16
+    expression  go to state 17
+
+
+State 22
+
+   16 conditional: CIF '(' . assigns ')' '{' $@2 statement '}' conditionalElse
+
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    assigns     go to state 44
+    value       go to state 16
+    expression  go to state 17
+
+
+State 23
+
+    0 $accept: goal $end .
+
+    $default  accept
+
+
+State 24
+
+    3 program: statement program .
+
+    $default  reduce using rule 3 (program)
+
+
+State 25
+
+   29 assigns: value NULLCOALESCING . value
+
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    value       go to state 45
+    expression  go to state 17
+
+
+State 26
+
+   30 assigns: value '?' . value ':' value
+
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    value       go to state 46
+    expression  go to state 17
+
+
+State 27
+
+   39 expression: expression EXPGT . expression
+
+    VINT        shift, and go to state 5
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    expression  go to state 47
+
+
+State 28
+
+   40 expression: expression EXPLT . expression
+
+    VINT        shift, and go to state 5
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    expression  go to state 48
+
+
+State 29
+
+   41 expression: expression EXPEQ . expression
+
+    VINT        shift, and go to state 5
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    expression  go to state 49
+
+
+State 30
+
+   42 expression: expression EXPDF . expression
+
+    VINT        shift, and go to state 5
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    expression  go to state 50
+
+
+State 31
+
+   38 expression: expression LOGOR . expression
+
+    VINT        shift, and go to state 5
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    expression  go to state 51
+
+
+State 32
+
+   37 expression: expression LOGAND . expression
+
+    VINT        shift, and go to state 5
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    expression  go to state 52
+
+
+State 33
+
+   44 expression: expression '>' . expression
+
+    VINT        shift, and go to state 5
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    expression  go to state 53
+
+
+State 34
+
+   43 expression: expression '<' . expression
+
+    VINT        shift, and go to state 5
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    expression  go to state 54
+
+
+State 35
+
+   46 expression: expression '-' . expression
+
+    VINT        shift, and go to state 5
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    expression  go to state 55
+
+
+State 36
+
+   45 expression: expression '+' . expression
+
+    VINT        shift, and go to state 5
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    expression  go to state 56
+
+
+State 37
+
+   47 expression: expression '*' . expression
+
+    VINT        shift, and go to state 5
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    expression  go to state 57
+
+
+State 38
+
+   48 expression: expression '/' . expression
+
+    VINT        shift, and go to state 5
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    expression  go to state 58
+
+
+State 39
+
+    9 declarations: DLET IDENTIFIER ASSGNOP . assigns
+
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    assigns     go to state 59
+    value       go to state 16
+    expression  go to state 17
+
+
+State 40
+
+   11 declarations: DCONST IDENTIFIER ASSGNOP . assigns
+   13             | DCONST IDENTIFIER ASSGNOP . $@1 anonymFunction
+
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    $default  reduce using rule 12 ($@1)
+
+    $@1         go to state 60
+    assigns     go to state 61
+    value       go to state 16
+    expression  go to state 17
+
+
+State 41
+
+   10 declarations: DVAR IDENTIFIER ASSGNOP . assigns
+
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    assigns     go to state 62
+    value       go to state 16
+    expression  go to state 17
+
+
+State 42
+
+   36 expression: IDENTIFIER .
+
+    $default  reduce using rule 36 (expression)
+
+
+State 43
+
+   14 declarations: IDENTIFIER ASSGNOP assigns .
+
+    $default  reduce using rule 14 (declarations)
+
+
+State 44
+
+   16 conditional: CIF '(' assigns . ')' '{' $@2 statement '}' conditionalElse
+
+    ')'  shift, and go to state 63
+
+
+State 45
+
+   29 assigns: value NULLCOALESCING value .
+
+    $default  reduce using rule 29 (assigns)
+
+
+State 46
+
+   30 assigns: value '?' value . ':' value
+
+    ':'  shift, and go to state 64
+
+
+State 47
+
+   37 expression: expression . LOGAND expression
+   38           | expression . LOGOR expression
+   39           | expression . EXPGT expression
+   39           | expression EXPGT expression .
+   40           | expression . EXPLT expression
+   41           | expression . EXPEQ expression
+   42           | expression . EXPDF expression
+   43           | expression . '<' expression
+   44           | expression . '>' expression
+   45           | expression . '+' expression
+   46           | expression . '-' expression
+   47           | expression . '*' expression
+   48           | expression . '/' expression
+
+    '-'  shift, and go to state 35
+    '+'  shift, and go to state 36
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+
+    $default  reduce using rule 39 (expression)
+
+
+State 48
+
+   37 expression: expression . LOGAND expression
+   38           | expression . LOGOR expression
+   39           | expression . EXPGT expression
+   40           | expression . EXPLT expression
+   40           | expression EXPLT expression .
+   41           | expression . EXPEQ expression
+   42           | expression . EXPDF expression
+   43           | expression . '<' expression
+   44           | expression . '>' expression
+   45           | expression . '+' expression
+   46           | expression . '-' expression
+   47           | expression . '*' expression
+   48           | expression . '/' expression
+
+    '-'  shift, and go to state 35
+    '+'  shift, and go to state 36
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+
+    $default  reduce using rule 40 (expression)
+
+
+State 49
+
+   37 expression: expression . LOGAND expression
+   38           | expression . LOGOR expression
+   39           | expression . EXPGT expression
+   40           | expression . EXPLT expression
+   41           | expression . EXPEQ expression
+   41           | expression EXPEQ expression .
+   42           | expression . EXPDF expression
+   43           | expression . '<' expression
+   44           | expression . '>' expression
+   45           | expression . '+' expression
+   46           | expression . '-' expression
+   47           | expression . '*' expression
+   48           | expression . '/' expression
+
+    '-'  shift, and go to state 35
+    '+'  shift, and go to state 36
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+
+    $default  reduce using rule 41 (expression)
+
+
+State 50
+
+   37 expression: expression . LOGAND expression
+   38           | expression . LOGOR expression
+   39           | expression . EXPGT expression
+   40           | expression . EXPLT expression
+   41           | expression . EXPEQ expression
+   42           | expression . EXPDF expression
+   42           | expression EXPDF expression .
+   43           | expression . '<' expression
+   44           | expression . '>' expression
+   45           | expression . '+' expression
+   46           | expression . '-' expression
+   47           | expression . '*' expression
+   48           | expression . '/' expression
+
+    '-'  shift, and go to state 35
+    '+'  shift, and go to state 36
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+
+    $default  reduce using rule 42 (expression)
+
+
+State 51
+
+   37 expression: expression . LOGAND expression
+   38           | expression . LOGOR expression
+   38           | expression LOGOR expression .
+   39           | expression . EXPGT expression
+   40           | expression . EXPLT expression
+   41           | expression . EXPEQ expression
+   42           | expression . EXPDF expression
+   43           | expression . '<' expression
+   44           | expression . '>' expression
+   45           | expression . '+' expression
+   46           | expression . '-' expression
+   47           | expression . '*' expression
+   48           | expression . '/' expression
+
+    EXPGT  shift, and go to state 27
+    EXPLT  shift, and go to state 28
+    EXPEQ  shift, and go to state 29
+    EXPDF  shift, and go to state 30
+    '>'    shift, and go to state 33
+    '<'    shift, and go to state 34
+    '-'    shift, and go to state 35
+    '+'    shift, and go to state 36
+    '*'    shift, and go to state 37
+    '/'    shift, and go to state 38
+
+    $default  reduce using rule 38 (expression)
+
+
+State 52
+
+   37 expression: expression . LOGAND expression
+   37           | expression LOGAND expression .
+   38           | expression . LOGOR expression
+   39           | expression . EXPGT expression
+   40           | expression . EXPLT expression
+   41           | expression . EXPEQ expression
+   42           | expression . EXPDF expression
+   43           | expression . '<' expression
+   44           | expression . '>' expression
+   45           | expression . '+' expression
+   46           | expression . '-' expression
+   47           | expression . '*' expression
+   48           | expression . '/' expression
+
+    EXPGT  shift, and go to state 27
+    EXPLT  shift, and go to state 28
+    EXPEQ  shift, and go to state 29
+    EXPDF  shift, and go to state 30
+    '>'    shift, and go to state 33
+    '<'    shift, and go to state 34
+    '-'    shift, and go to state 35
+    '+'    shift, and go to state 36
+    '*'    shift, and go to state 37
+    '/'    shift, and go to state 38
+
+    $default  reduce using rule 37 (expression)
+
+
+State 53
+
+   37 expression: expression . LOGAND expression
+   38           | expression . LOGOR expression
+   39           | expression . EXPGT expression
+   40           | expression . EXPLT expression
+   41           | expression . EXPEQ expression
+   42           | expression . EXPDF expression
+   43           | expression . '<' expression
+   44           | expression . '>' expression
+   44           | expression '>' expression .
+   45           | expression . '+' expression
+   46           | expression . '-' expression
+   47           | expression . '*' expression
+   48           | expression . '/' expression
+
+    '-'  shift, and go to state 35
+    '+'  shift, and go to state 36
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+
+    $default  reduce using rule 44 (expression)
+
+
+State 54
+
+   37 expression: expression . LOGAND expression
+   38           | expression . LOGOR expression
+   39           | expression . EXPGT expression
+   40           | expression . EXPLT expression
+   41           | expression . EXPEQ expression
+   42           | expression . EXPDF expression
+   43           | expression . '<' expression
+   43           | expression '<' expression .
+   44           | expression . '>' expression
+   45           | expression . '+' expression
+   46           | expression . '-' expression
+   47           | expression . '*' expression
+   48           | expression . '/' expression
+
+    '-'  shift, and go to state 35
+    '+'  shift, and go to state 36
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+
+    $default  reduce using rule 43 (expression)
+
+
+State 55
+
+   37 expression: expression . LOGAND expression
+   38           | expression . LOGOR expression
+   39           | expression . EXPGT expression
+   40           | expression . EXPLT expression
+   41           | expression . EXPEQ expression
+   42           | expression . EXPDF expression
+   43           | expression . '<' expression
+   44           | expression . '>' expression
+   45           | expression . '+' expression
+   46           | expression . '-' expression
+   46           | expression '-' expression .
+   47           | expression . '*' expression
+   48           | expression . '/' expression
+
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+
+    $default  reduce using rule 46 (expression)
+
+
+State 56
+
+   37 expression: expression . LOGAND expression
+   38           | expression . LOGOR expression
+   39           | expression . EXPGT expression
+   40           | expression . EXPLT expression
+   41           | expression . EXPEQ expression
+   42           | expression . EXPDF expression
+   43           | expression . '<' expression
+   44           | expression . '>' expression
+   45           | expression . '+' expression
+   45           | expression '+' expression .
+   46           | expression . '-' expression
+   47           | expression . '*' expression
+   48           | expression . '/' expression
+
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+
+    $default  reduce using rule 45 (expression)
+
+
+State 57
+
+   37 expression: expression . LOGAND expression
+   38           | expression . LOGOR expression
+   39           | expression . EXPGT expression
+   40           | expression . EXPLT expression
+   41           | expression . EXPEQ expression
+   42           | expression . EXPDF expression
+   43           | expression . '<' expression
+   44           | expression . '>' expression
+   45           | expression . '+' expression
+   46           | expression . '-' expression
+   47           | expression . '*' expression
+   47           | expression '*' expression .
+   48           | expression . '/' expression
+
+    $default  reduce using rule 47 (expression)
+
+
+State 58
+
+   37 expression: expression . LOGAND expression
+   38           | expression . LOGOR expression
+   39           | expression . EXPGT expression
+   40           | expression . EXPLT expression
+   41           | expression . EXPEQ expression
+   42           | expression . EXPDF expression
+   43           | expression . '<' expression
+   44           | expression . '>' expression
+   45           | expression . '+' expression
+   46           | expression . '-' expression
+   47           | expression . '*' expression
+   48           | expression . '/' expression
+   48           | expression '/' expression .
+
+    $default  reduce using rule 48 (expression)
+
+
+State 59
+
+    9 declarations: DLET IDENTIFIER ASSGNOP assigns .
+
+    $default  reduce using rule 9 (declarations)
+
+
+State 60
+
+   13 declarations: DCONST IDENTIFIER ASSGNOP $@1 . anonymFunction
+
+    DFUNC  shift, and go to state 65
+
+    anonymFunction  go to state 66
+
+
+State 61
+
+   11 declarations: DCONST IDENTIFIER ASSGNOP assigns .
+
+    $default  reduce using rule 11 (declarations)
+
+
+State 62
+
+   10 declarations: DVAR IDENTIFIER ASSGNOP assigns .
+
+    $default  reduce using rule 10 (declarations)
+
+
+State 63
+
+   16 conditional: CIF '(' assigns ')' . '{' $@2 statement '}' conditionalElse
+
+    '{'  shift, and go to state 67
+
+
+State 64
+
+   30 assigns: value '?' value ':' . value
+
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    value       go to state 68
+    expression  go to state 17
+
+
+State 65
+
+   23 anonymFunction: DFUNC . '(' funcArgsNull ')' $@5 '{' program '}'
+
+    '('  shift, and go to state 69
+
+
+State 66
+
+   13 declarations: DCONST IDENTIFIER ASSGNOP $@1 anonymFunction .
+
+    $default  reduce using rule 13 (declarations)
+
+
+State 67
+
+   16 conditional: CIF '(' assigns ')' '{' . $@2 statement '}' conditionalElse
+
+    $default  reduce using rule 15 ($@2)
+
+    $@2  go to state 70
+
+
+State 68
+
+   30 assigns: value '?' value ':' value .
+
+    $default  reduce using rule 30 (assigns)
+
+
+State 69
+
+   23 anonymFunction: DFUNC '(' . funcArgsNull ')' $@5 '{' program '}'
+
+    IDENTIFIER  shift, and go to state 71
+
+    $default  reduce using rule 24 (funcArgsNull)
+
+    funcArgsNull  go to state 72
+    funcArgs      go to state 73
+
+
+State 70
+
+   16 conditional: CIF '(' assigns ')' '{' $@2 . statement '}' conditionalElse
+
+    DLET        shift, and go to state 1
+    DCONST      shift, and go to state 2
+    DVAR        shift, and go to state 3
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 8
+    CIF         shift, and go to state 9
+
+    statement     go to state 74
+    declarations  go to state 13
+    conditional   go to state 14
+    assigns       go to state 15
+    value         go to state 16
+    expression    go to state 17
+
+
+State 71
+
+   26 funcArgs: IDENTIFIER .
+   27         | IDENTIFIER . ',' funcArgs
+
+    ','  shift, and go to state 75
+
+    $default  reduce using rule 26 (funcArgs)
+
+
+State 72
+
+   23 anonymFunction: DFUNC '(' funcArgsNull . ')' $@5 '{' program '}'
+
+    ')'  shift, and go to state 76
+
+
+State 73
+
+   25 funcArgsNull: funcArgs .
+
+    $default  reduce using rule 25 (funcArgsNull)
+
+
+State 74
+
+   16 conditional: CIF '(' assigns ')' '{' $@2 statement . '}' conditionalElse
+
+    '}'  shift, and go to state 77
+
+
+State 75
+
+   27 funcArgs: IDENTIFIER ',' . funcArgs
+
+    IDENTIFIER  shift, and go to state 71
+
+    funcArgs  go to state 78
+
+
+State 76
+
+   23 anonymFunction: DFUNC '(' funcArgsNull ')' . $@5 '{' program '}'
+
+    $default  reduce using rule 22 ($@5)
+
+    $@5  go to state 79
+
+
+State 77
+
+   16 conditional: CIF '(' assigns ')' '{' $@2 statement '}' . conditionalElse
+
+    CELSE  shift, and go to state 80
+
+    $default  reduce using rule 17 (conditionalElse)
+
+    conditionalElse  go to state 81
+
+
+State 78
+
+   27 funcArgs: IDENTIFIER ',' funcArgs .
+
+    $default  reduce using rule 27 (funcArgs)
+
+
+State 79
+
+   23 anonymFunction: DFUNC '(' funcArgsNull ')' $@5 . '{' program '}'
+
+    '{'  shift, and go to state 82
+
+
+State 80
+
+   19 conditionalElse: CELSE . '{' $@3 statement '}'
+   21                | CELSE . CIF '(' assigns ')' '{' $@4 statement '}' conditionalElse
+
+    CIF  shift, and go to state 83
+    '{'  shift, and go to state 84
+
+
+State 81
+
+   16 conditional: CIF '(' assigns ')' '{' $@2 statement '}' conditionalElse .
+
+    $default  reduce using rule 16 (conditional)
+
+
+State 82
+
+   23 anonymFunction: DFUNC '(' funcArgsNull ')' $@5 '{' . program '}'
+
+    DLET        shift, and go to state 1
+    DCONST      shift, and go to state 2
+    DVAR        shift, and go to state 3
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 8
+    CIF         shift, and go to state 9
+
+    program       go to state 85
+    statement     go to state 12
+    declarations  go to state 13
+    conditional   go to state 14
+    assigns       go to state 15
+    value         go to state 16
+    expression    go to state 17
+
+
+State 83
+
+   21 conditionalElse: CELSE CIF . '(' assigns ')' '{' $@4 statement '}' conditionalElse
+
+    '('  shift, and go to state 86
+
+
+State 84
+
+   19 conditionalElse: CELSE '{' . $@3 statement '}'
+
+    $default  reduce using rule 18 ($@3)
+
+    $@3  go to state 87
+
+
+State 85
+
+   23 anonymFunction: DFUNC '(' funcArgsNull ')' $@5 '{' program . '}'
+
+    '}'  shift, and go to state 88
+
+
+State 86
+
+   21 conditionalElse: CELSE CIF '(' . assigns ')' '{' $@4 statement '}' conditionalElse
+
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 42
+
+    assigns     go to state 89
+    value       go to state 16
+    expression  go to state 17
+
+
+State 87
+
+   19 conditionalElse: CELSE '{' $@3 . statement '}'
+
+    DLET        shift, and go to state 1
+    DCONST      shift, and go to state 2
+    DVAR        shift, and go to state 3
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 8
+    CIF         shift, and go to state 9
+
+    statement     go to state 90
+    declarations  go to state 13
+    conditional   go to state 14
+    assigns       go to state 15
+    value         go to state 16
+    expression    go to state 17
+
+
+State 88
+
+   23 anonymFunction: DFUNC '(' funcArgsNull ')' $@5 '{' program '}' .
+
+    $default  reduce using rule 23 (anonymFunction)
+
+
+State 89
+
+   21 conditionalElse: CELSE CIF '(' assigns . ')' '{' $@4 statement '}' conditionalElse
+
+    ')'  shift, and go to state 91
+
+
+State 90
+
+   19 conditionalElse: CELSE '{' $@3 statement . '}'
+
+    '}'  shift, and go to state 92
+
+
+State 91
+
+   21 conditionalElse: CELSE CIF '(' assigns ')' . '{' $@4 statement '}' conditionalElse
+
+    '{'  shift, and go to state 93
+
+
+State 92
+
+   19 conditionalElse: CELSE '{' $@3 statement '}' .
+
+    $default  reduce using rule 19 (conditionalElse)
+
+
+State 93
+
+   21 conditionalElse: CELSE CIF '(' assigns ')' '{' . $@4 statement '}' conditionalElse
+
+    $default  reduce using rule 20 ($@4)
+
+    $@4  go to state 94
+
+
+State 94
+
+   21 conditionalElse: CELSE CIF '(' assigns ')' '{' $@4 . statement '}' conditionalElse
+
+    DLET        shift, and go to state 1
+    DCONST      shift, and go to state 2
+    DVAR        shift, and go to state 3
+    VSTR        shift, and go to state 4
+    VINT        shift, and go to state 5
+    VBOOL       shift, and go to state 6
+    VFLOAT      shift, and go to state 7
+    IDENTIFIER  shift, and go to state 8
+    CIF         shift, and go to state 9
+
+    statement     go to state 95
+    declarations  go to state 13
+    conditional   go to state 14
+    assigns       go to state 15
+    value         go to state 16
+    expression    go to state 17
+
+
+State 95
+
+   21 conditionalElse: CELSE CIF '(' assigns ')' '{' $@4 statement . '}' conditionalElse
+
+    '}'  shift, and go to state 96
+
+
+State 96
+
+   21 conditionalElse: CELSE CIF '(' assigns ')' '{' $@4 statement '}' . conditionalElse
+
+    CELSE  shift, and go to state 80
+
+    $default  reduce using rule 17 (conditionalElse)
+
+    conditionalElse  go to state 97
+
+
+State 97
+
+   21 conditionalElse: CELSE CIF '(' assigns ')' '{' $@4 statement '}' conditionalElse .
+
+    $default  reduce using rule 21 (conditionalElse)
