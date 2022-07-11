@@ -67,7 +67,11 @@ extern int yydebug;
     LOGAND = 277,
     FRETURN = 278,
     FBREAK = 279,
-    FCONTINUE = 280
+    FCONTINUE = 280,
+    LFOR = 281,
+    LOF = 282,
+    LIN = 283,
+    LWHILE = 284
   };
 #endif
 
@@ -80,7 +84,7 @@ union YYSTYPE
 
 	char* ystr;
 
-#line 84 "parser.tab.h" /* yacc.c:1909  */
+#line 88 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

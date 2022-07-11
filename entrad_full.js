@@ -4,11 +4,9 @@
 */
 let nice = " adwwdw "
 let hello
-var kek = 3.6
-const top = 2
+var kek = 3.6 || true && false
+const top = true
 const toper = false
-let t = []
-let k = [1, 2, 4, 5, 6]
 const s = false ?? "nice"
 let wa = 2 >= 4
 let wb = 2 == 4
@@ -20,35 +18,74 @@ let wg = 2 >= 4
 let wh = 2 || 4
 let wi = 2 && 4
 let xa = 2 + 4
-let  xb = 2 - 4
-let  xc = 2 * 4
-let  xd = 2 / 4
-const sa = s ? "top" : "dawd"
+let xb = 2 - 4
+let xc = 2 * 4
+let xd = 2 / 4
+xd = 2 + xc
 
-let d, j
-
-if (s) {
-    d = "kek"
-}
-
-if (s) {
-    d = "kek"
-} else {
-    j = "blabla"
+if ( 3 * 5 && 2 + 4  || false) {
+  d = "kek"
 }
 
 if (s) {
   d = "kek"
-} else if (k.length) {
+} else {
+  j = "blabla"
+}
+
+if (s) {
+  d = "kek"
+} else if (k) {
   d = "topper"
 } else {
   j = "blabla"
 }
 
+function helloWorld(a, b, c) {
+  let nice = " adwwdw "
+  let hello
+  var kek = 3.6
+  const top = 2
+  const toper = false
 
+  if (s) {
+    d = "kek"
+    if (s) {
+      d = "kek"
+      if (s) {
+        d = "kek"
+      }
+    }
+    if (s) {
+      d = "kek"
+    }
+  } else {
+    j = "blabla"
+  }  
+}
 
+const helloFuck = function (b, a, c) {
+  let nice = " adwwdw "
+  let hello
+  var kek = 3.6
+  const top = 2
+  const toper = false
+  if (s) {
+    d = "kek"
+  } else if (k) {
+    d = "topper"
+  } else {
+    j = "blabla"
+  }
+}
 
-  
+const helloFuck = ( ) => {
+  let nice = " adwwdw "
+  let hello
+  var kek = 3.6
+  const top = 2
+  const toper = false
+}
 
 for (let w of k) {
   d = w
@@ -79,34 +116,4 @@ switch (d) {
     break
   default:
     j = 4
-}
-
-function helloWorld() {
-  let nice = " adwwdw "
-  let hello
-  var kek = 3.6
-  const top = 2
-  const toper = false
-  let t = []
-  let k = [1, 2, 4, 5, 6]
-}
-
-const helloNice = () => {
-  let nice = " adwwdw "
-  let hello
-  var kek = 3.6
-  const top = 2
-  const toper = false
-  let t = []
-  let k = [1, 2, 4, 5, 6]
-}
-
-const helloFuck = function () {
-  let nice = " adwwdw "
-  let hello
-  var kek = 3.6
-  const top = 2
-  const toper = false
-  let t = []
-  let k = [1, 2, 4, 5, 6]
 }
