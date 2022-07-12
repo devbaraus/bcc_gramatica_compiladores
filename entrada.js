@@ -16,11 +16,16 @@ for (let i = 0; i < k; i = i + 2) {
   }
 };
 
+for (let k of [1,2,5,5]) {
+  let ab = 23;
+}
+
 let b = 4
 
 const hello = function (b = 2 || 9, a = b, c = 3) {
   let nice = " adwwdw "
   let hello
+  let s = []
   var kek = 3.6
   const top = 2
   const toper = false

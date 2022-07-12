@@ -101,6 +101,12 @@ loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' {
 } program '}' {
 	global_scope -= 1;
 }
+| LFOR '(' DLET IDENTIFIER LOF arr_expression ')' '{' {
+	fprintf(output, "for %s in %s:\n", $4, $6); 
+	global_scope += 1;
+} program '}' {
+	global_scope -= 1;
+}
 | LWHILE '(' expression ')' '{' {
 	fprintf(output, "while %s:\n", $3); 
 	global_scope += 1;
