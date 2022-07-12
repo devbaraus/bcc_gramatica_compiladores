@@ -70,7 +70,6 @@ statement: expression { if($1 != ""){ ScopeTab(); fprintf(output, "%s\n", $1);} 
 | assigns {if($1 != ""){ ScopeTab(); fprintf(output, "%s\n", $1);}}
 | conditional { $$=""; }
 | loop {$$="";}
-| IDENTIFIER '(' funcArgsNull ')' { ScopeTab(); fprintf(output, "%s( %s )", $1, $3);}
 | flow {if($1 != ""){ ScopeTab(); fprintf(output, "%s\n", $1);}}
 ;
 
@@ -281,6 +280,8 @@ expression: VSTR { $$ = $1; }
 | IDENTIFIER  {	
 	$$= $1; 
 }
+| IDENTIFIER '(' funcArgsNull ')' {
+ char t[1000]; sprintf(t, "%s( %s )", $1, $3); $$=stringpool(t);}
 | arr_index { $$ = $1; }
 | arr_expression { $$ = $1; }
 // | '(' expression ')' { char t[1000]; sprintf(t, "( %s )", $2); $$=stringpool(t); }

@@ -30,116 +30,116 @@ Grammar
     9          | assigns
    10          | conditional
    11          | loop
-   12          | IDENTIFIER '(' funcArgsNull ')'
-   13          | flow
+   12          | flow
 
-   14 flow: FRETURN
-   15     | FRETURN expression
-   16     | FBREAK
-   17     | FCONTINUE
+   13 flow: FRETURN
+   14     | FRETURN expression
+   15     | FBREAK
+   16     | FCONTINUE
 
-   18 $@1: %empty
+   17 $@1: %empty
 
-   19 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' $@1 program '}'
+   18 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' $@1 program '}'
 
-   20 $@2: %empty
+   19 $@2: %empty
 
-   21 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' $@2 program '}'
+   20 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' $@2 program '}'
 
-   22 $@3: %empty
+   21 $@3: %empty
 
-   23 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression ')' '{' $@3 program '}'
+   22 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression ')' '{' $@3 program '}'
 
-   24 $@4: %empty
+   23 $@4: %empty
 
-   25 loop: LWHILE '(' expression ')' '{' $@4 program '}'
+   24 loop: LWHILE '(' expression ')' '{' $@4 program '}'
 
-   26 declarations: DLET IDENTIFIER
-   27             | DVAR IDENTIFIER
-   28             | DLET IDENTIFIER ASSGNOP expression
-   29             | DVAR IDENTIFIER ASSGNOP expression
-   30             | DCONST IDENTIFIER ASSGNOP expression
+   25 declarations: DLET IDENTIFIER
+   26             | DVAR IDENTIFIER
+   27             | DLET IDENTIFIER ASSGNOP expression
+   28             | DVAR IDENTIFIER ASSGNOP expression
+   29             | DCONST IDENTIFIER ASSGNOP expression
 
-   31 $@5: %empty
+   30 $@5: %empty
 
-   32 declarations: DCONST IDENTIFIER ASSGNOP $@5 anonymFunction
+   31 declarations: DCONST IDENTIFIER ASSGNOP $@5 anonymFunction
 
-   33 $@6: %empty
+   32 $@6: %empty
 
-   34 $@7: %empty
+   33 $@7: %empty
 
-   35 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull ')' '{' $@7 program '}'
+   34 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull ')' '{' $@7 program '}'
 
-   36 assigns: IDENTIFIER ASSGNOP expression
-   37        | IDENTIFIER '[' arr_values ']' ASSGNOP expression
+   35 assigns: IDENTIFIER ASSGNOP expression
+   36        | IDENTIFIER '[' arr_values ']' ASSGNOP expression
 
-   38 $@8: %empty
+   37 $@8: %empty
 
-   39 $@9: %empty
+   38 $@9: %empty
 
-   40 anonymFunction: DFUNC '(' $@8 funcParamsNull ')' '{' $@9 program '}'
+   39 anonymFunction: DFUNC '(' $@8 funcParamsNull ')' '{' $@9 program '}'
 
-   41 $@10: %empty
+   40 $@10: %empty
 
-   42 anonymFunction: '(' funcParamsNull ')' DAFUNC '{' $@10 program '}'
+   41 anonymFunction: '(' funcParamsNull ')' DAFUNC '{' $@10 program '}'
 
-   43 funcParamsNull: %empty
-   44               | funcParams
+   42 funcParamsNull: %empty
+   43               | funcParams
 
-   45 funcParams: IDENTIFIER
-   46           | assigns
+   44 funcParams: IDENTIFIER
+   45           | assigns
 
-   47 $@11: %empty
+   46 $@11: %empty
 
-   48 $@12: %empty
+   47 $@12: %empty
 
-   49 funcParams: IDENTIFIER $@11 ',' $@12 funcParams
+   48 funcParams: IDENTIFIER $@11 ',' $@12 funcParams
 
-   50 $@13: %empty
+   49 $@13: %empty
 
-   51 $@14: %empty
+   50 $@14: %empty
 
-   52 funcParams: assigns $@13 ',' $@14 funcParams
+   51 funcParams: assigns $@13 ',' $@14 funcParams
 
-   53 funcArgsNull: %empty
-   54             | expression
-   55             | expression ',' funcArgsNull
-   56             | ',' funcArgsNull
+   52 funcArgsNull: %empty
+   53             | expression
+   54             | expression ',' funcArgsNull
+   55             | ',' funcArgsNull
 
-   57 $@15: %empty
+   56 $@15: %empty
 
-   58 $@16: %empty
+   57 $@16: %empty
 
-   59 conditional: CIF '(' expression ')' '{' $@15 program $@16 '}' conditionalElse
+   58 conditional: CIF '(' expression ')' '{' $@15 program $@16 '}' conditionalElse
 
-   60 conditionalElse: %empty
+   59 conditionalElse: %empty
 
-   61 $@17: %empty
+   60 $@17: %empty
 
-   62 $@18: %empty
+   61 $@18: %empty
 
-   63 conditionalElse: CELSE '{' $@17 program $@18 '}'
+   62 conditionalElse: CELSE '{' $@17 program $@18 '}'
 
-   64 $@19: %empty
+   63 $@19: %empty
 
-   65 $@20: %empty
+   64 $@20: %empty
 
-   66 conditionalElse: CELSE CIF '(' expression ')' '{' $@19 program $@20 '}' conditionalElse
+   65 conditionalElse: CELSE CIF '(' expression ')' '{' $@19 program $@20 '}' conditionalElse
 
-   67 arr_expression: '[' ']'
-   68               | '[' arr_values ']'
+   66 arr_expression: '[' ']'
+   67               | '[' arr_values ']'
 
-   69 arr_values: expression
-   70           | expression ',' arr_values
+   68 arr_values: expression
+   69           | expression ',' arr_values
 
-   71 arr_index: IDENTIFIER '[' arr_values ']'
-   72          | arr_expression '[' arr_values ']'
+   70 arr_index: IDENTIFIER '[' arr_values ']'
+   71          | arr_expression '[' arr_values ']'
 
-   73 expression: VSTR
-   74           | VBOOL
-   75           | VINT
-   76           | VFLOAT
-   77           | IDENTIFIER
+   72 expression: VSTR
+   73           | VBOOL
+   74           | VINT
+   75           | VFLOAT
+   76           | IDENTIFIER
+   77           | IDENTIFIER '(' funcArgsNull ')'
    78           | arr_index
    79           | arr_expression
    80           | expression NULLCOALESCING expression
@@ -161,11 +161,11 @@ Grammar
 Terminals, with rules where they appear
 
 $end (0) 0
-'(' (40) 12 19 21 23 25 35 40 42 59 66
-')' (41) 12 19 21 23 25 35 40 42 59 66
+'(' (40) 18 20 22 24 34 39 41 58 65 77
+')' (41) 18 20 22 24 34 39 41 58 65 77
 '*' (42) 92
 '+' (43) 90
-',' (44) 49 52 55 56 70
+',' (44) 48 51 54 55 69
 '-' (45) 91
 '/' (47) 93
 ':' (58) 81
@@ -173,24 +173,24 @@ $end (0) 0
 '=' (61)
 '>' (62) 89
 '?' (63) 81
-'[' (91) 37 67 68 71 72
-']' (93) 37 67 68 71 72
-'{' (123) 19 21 23 25 35 40 42 59 63 66
-'}' (125) 19 21 23 25 35 40 42 59 63 66
+'[' (91) 36 66 67 70 71
+']' (93) 36 66 67 70 71
+'{' (123) 18 20 22 24 34 39 41 58 62 65
+'}' (125) 18 20 22 24 34 39 41 58 62 65
 error (256)
-DLET (258) 21 23 26 28
-DCONST (259) 30 32
-DVAR (260) 27 29
-DFUNC (261) 35 40
-DAFUNC (262) 42
-VSTR (263) 73
-VINT (264) 75
-VBOOL (265) 74
-VFLOAT (266) 76
-IDENTIFIER (267) 12 21 23 26 27 28 29 30 32 35 36 37 45 49 71 77
-CIF (268) 59 66
-CELSE (269) 63 66
-ASSGNOP (270) 28 29 30 32 36 37
+DLET (258) 20 22 25 27
+DCONST (259) 29 31
+DVAR (260) 26 28
+DFUNC (261) 34 39
+DAFUNC (262) 41
+VSTR (263) 72
+VINT (264) 74
+VBOOL (265) 73
+VFLOAT (266) 75
+IDENTIFIER (267) 20 22 25 26 27 28 29 31 34 35 36 44 48 70 76 77
+CIF (268) 58 65
+CELSE (269) 62 65
+ASSGNOP (270) 27 28 29 31 35 36
 EXPGT (271) 84
 EXPLT (272) 85
 EXPEQ (273) 86
@@ -198,14 +198,14 @@ EXPDF (274) 87
 NULLCOALESCING (275) 80
 LOGOR (276) 83
 LOGAND (277) 82
-FRETURN (278) 14 15
-FBREAK (279) 16
-FCONTINUE (280) 17
-SEMICOLON (281) 6 19
-LFOR (282) 19 21 23
-LOF (283) 21 23
+FRETURN (278) 13 14
+FBREAK (279) 15
+FCONTINUE (280) 16
+SEMICOLON (281) 6 18
+LFOR (282) 18 20 22
+LOF (283) 20 22
 LIN (284)
-LWHILE (285) 25
+LWHILE (285) 24
 CBLOCK (286)
 CINLINE (287)
 
@@ -217,81 +217,81 @@ $accept (49)
 goal (50)
     on left: 1 2, on right: 0
 program (51)
-    on left: 3 4, on right: 1 4 19 21 23 25 35 40 42 59 63 66
+    on left: 3 4, on right: 1 4 18 20 22 24 34 39 41 58 62 65
 semicolon_not (52)
     on left: 5 6, on right: 3 4
 statement (53)
-    on left: 7 8 9 10 11 12 13, on right: 3 4
+    on left: 7 8 9 10 11 12, on right: 3 4
 flow (54)
-    on left: 14 15 16 17, on right: 13
+    on left: 13 14 15 16, on right: 12
 loop (55)
-    on left: 19 21 23 25, on right: 11
+    on left: 18 20 22 24, on right: 11
 $@1 (56)
-    on left: 18, on right: 19
+    on left: 17, on right: 18
 $@2 (57)
-    on left: 20, on right: 21
+    on left: 19, on right: 20
 $@3 (58)
-    on left: 22, on right: 23
+    on left: 21, on right: 22
 $@4 (59)
-    on left: 24, on right: 25
+    on left: 23, on right: 24
 declarations (60)
-    on left: 26 27 28 29 30 32 35, on right: 8 19
+    on left: 25 26 27 28 29 31 34, on right: 8 18
 $@5 (61)
-    on left: 31, on right: 32
+    on left: 30, on right: 31
 $@6 (62)
-    on left: 33, on right: 35
+    on left: 32, on right: 34
 $@7 (63)
-    on left: 34, on right: 35
+    on left: 33, on right: 34
 assigns (64)
-    on left: 36 37, on right: 9 19 46 52
+    on left: 35 36, on right: 9 18 45 51
 anonymFunction (65)
-    on left: 40 42, on right: 32
+    on left: 39 41, on right: 31
 $@8 (66)
-    on left: 38, on right: 40
+    on left: 37, on right: 39
 $@9 (67)
-    on left: 39, on right: 40
+    on left: 38, on right: 39
 $@10 (68)
-    on left: 41, on right: 42
+    on left: 40, on right: 41
 funcParamsNull (69)
-    on left: 43 44, on right: 35 40 42
+    on left: 42 43, on right: 34 39 41
 funcParams (70)
-    on left: 45 46 49 52, on right: 44 49 52
+    on left: 44 45 48 51, on right: 43 48 51
 $@11 (71)
-    on left: 47, on right: 49
+    on left: 46, on right: 48
 $@12 (72)
-    on left: 48, on right: 49
+    on left: 47, on right: 48
 $@13 (73)
-    on left: 50, on right: 52
+    on left: 49, on right: 51
 $@14 (74)
-    on left: 51, on right: 52
+    on left: 50, on right: 51
 funcArgsNull (75)
-    on left: 53 54 55 56, on right: 12 55 56
+    on left: 52 53 54 55, on right: 54 55 77
 conditional (76)
-    on left: 59, on right: 10
+    on left: 58, on right: 10
 $@15 (77)
-    on left: 57, on right: 59
+    on left: 56, on right: 58
 $@16 (78)
-    on left: 58, on right: 59
+    on left: 57, on right: 58
 conditionalElse (79)
-    on left: 60 63 66, on right: 59 66
+    on left: 59 62 65, on right: 58 65
 $@17 (80)
-    on left: 61, on right: 63
+    on left: 60, on right: 62
 $@18 (81)
-    on left: 62, on right: 63
+    on left: 61, on right: 62
 $@19 (82)
-    on left: 64, on right: 66
+    on left: 63, on right: 65
 $@20 (83)
-    on left: 65, on right: 66
+    on left: 64, on right: 65
 arr_expression (84)
-    on left: 67 68, on right: 23 72 79
+    on left: 66 67, on right: 22 71 79
 arr_values (85)
-    on left: 69 70, on right: 37 68 70 71 72
+    on left: 68 69, on right: 36 67 69 70 71
 arr_index (86)
-    on left: 71 72, on right: 78
+    on left: 70 71, on right: 78
 expression (87)
-    on left: 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90
-    91 92 93, on right: 7 15 19 25 28 29 30 36 37 54 55 59 66 69 70
-    80 81 82 83 84 85 86 87 88 89 90 91 92 93
+    on left: 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89
+    90 91 92 93, on right: 7 14 18 24 27 28 29 35 36 53 54 58 65 68
+    69 80 81 82 83 84 85 86 87 88 89 90 91 92 93
 
 
 State 0
@@ -332,90 +332,90 @@ State 0
 
 State 1
 
-   26 declarations: DLET . IDENTIFIER
-   28             | DLET . IDENTIFIER ASSGNOP expression
+   25 declarations: DLET . IDENTIFIER
+   27             | DLET . IDENTIFIER ASSGNOP expression
 
     IDENTIFIER  shift, and go to state 28
 
 
 State 2
 
-   30 declarations: DCONST . IDENTIFIER ASSGNOP expression
-   32             | DCONST . IDENTIFIER ASSGNOP $@5 anonymFunction
+   29 declarations: DCONST . IDENTIFIER ASSGNOP expression
+   31             | DCONST . IDENTIFIER ASSGNOP $@5 anonymFunction
 
     IDENTIFIER  shift, and go to state 29
 
 
 State 3
 
-   27 declarations: DVAR . IDENTIFIER
-   29             | DVAR . IDENTIFIER ASSGNOP expression
+   26 declarations: DVAR . IDENTIFIER
+   28             | DVAR . IDENTIFIER ASSGNOP expression
 
     IDENTIFIER  shift, and go to state 30
 
 
 State 4
 
-   35 declarations: DFUNC . IDENTIFIER '(' $@6 funcParamsNull ')' '{' $@7 program '}'
+   34 declarations: DFUNC . IDENTIFIER '(' $@6 funcParamsNull ')' '{' $@7 program '}'
 
     IDENTIFIER  shift, and go to state 31
 
 
 State 5
 
-   73 expression: VSTR .
+   72 expression: VSTR .
 
-    $default  reduce using rule 73 (expression)
+    $default  reduce using rule 72 (expression)
 
 
 State 6
 
-   75 expression: VINT .
-
-    $default  reduce using rule 75 (expression)
-
-
-State 7
-
-   74 expression: VBOOL .
+   74 expression: VINT .
 
     $default  reduce using rule 74 (expression)
 
 
+State 7
+
+   73 expression: VBOOL .
+
+    $default  reduce using rule 73 (expression)
+
+
 State 8
 
-   76 expression: VFLOAT .
+   75 expression: VFLOAT .
 
-    $default  reduce using rule 76 (expression)
+    $default  reduce using rule 75 (expression)
 
 
 State 9
 
-   12 statement: IDENTIFIER . '(' funcArgsNull ')'
-   36 assigns: IDENTIFIER . ASSGNOP expression
-   37        | IDENTIFIER . '[' arr_values ']' ASSGNOP expression
-   71 arr_index: IDENTIFIER . '[' arr_values ']'
-   77 expression: IDENTIFIER .
+   35 assigns: IDENTIFIER . ASSGNOP expression
+   36        | IDENTIFIER . '[' arr_values ']' ASSGNOP expression
+   70 arr_index: IDENTIFIER . '[' arr_values ']'
+   76 expression: IDENTIFIER .
+   77           | IDENTIFIER . '(' funcArgsNull ')'
 
     ASSGNOP  shift, and go to state 32
     '['      shift, and go to state 33
     '('      shift, and go to state 34
 
-    '['       [reduce using rule 77 (expression)]
-    $default  reduce using rule 77 (expression)
+    '['       [reduce using rule 76 (expression)]
+    $default  reduce using rule 76 (expression)
 
 
 State 10
 
-   59 conditional: CIF . '(' expression ')' '{' $@15 program $@16 '}' conditionalElse
+   58 conditional: CIF . '(' expression ')' '{' $@15 program $@16 '}' conditionalElse
 
     '('  shift, and go to state 35
 
 
 State 11
 
-   14 flow: FRETURN .
-   15     | FRETURN . expression
+   13 flow: FRETURN .
+   14     | FRETURN . expression
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -424,13 +424,13 @@ State 11
     IDENTIFIER  shift, and go to state 36
     '['         shift, and go to state 16
 
-    VSTR        [reduce using rule 14 (flow)]
-    VINT        [reduce using rule 14 (flow)]
-    VBOOL       [reduce using rule 14 (flow)]
-    VFLOAT      [reduce using rule 14 (flow)]
-    IDENTIFIER  [reduce using rule 14 (flow)]
-    '['         [reduce using rule 14 (flow)]
-    $default    reduce using rule 14 (flow)
+    VSTR        [reduce using rule 13 (flow)]
+    VINT        [reduce using rule 13 (flow)]
+    VBOOL       [reduce using rule 13 (flow)]
+    VFLOAT      [reduce using rule 13 (flow)]
+    IDENTIFIER  [reduce using rule 13 (flow)]
+    '['         [reduce using rule 13 (flow)]
+    $default    reduce using rule 13 (flow)
 
     arr_expression  go to state 25
     arr_index       go to state 26
@@ -439,38 +439,38 @@ State 11
 
 State 12
 
-   16 flow: FBREAK .
+   15 flow: FBREAK .
 
-    $default  reduce using rule 16 (flow)
+    $default  reduce using rule 15 (flow)
 
 
 State 13
 
-   17 flow: FCONTINUE .
+   16 flow: FCONTINUE .
 
-    $default  reduce using rule 17 (flow)
+    $default  reduce using rule 16 (flow)
 
 
 State 14
 
-   19 loop: LFOR . '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' $@1 program '}'
-   21     | LFOR . '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' $@2 program '}'
-   23     | LFOR . '(' DLET IDENTIFIER LOF arr_expression ')' '{' $@3 program '}'
+   18 loop: LFOR . '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' $@1 program '}'
+   20     | LFOR . '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' $@2 program '}'
+   22     | LFOR . '(' DLET IDENTIFIER LOF arr_expression ')' '{' $@3 program '}'
 
     '('  shift, and go to state 38
 
 
 State 15
 
-   25 loop: LWHILE . '(' expression ')' '{' $@4 program '}'
+   24 loop: LWHILE . '(' expression ')' '{' $@4 program '}'
 
     '('  shift, and go to state 39
 
 
 State 16
 
-   67 arr_expression: '[' . ']'
-   68               | '[' . arr_values ']'
+   66 arr_expression: '[' . ']'
+   67               | '[' . arr_values ']'
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -514,9 +514,9 @@ State 19
 
 State 20
 
-   13 statement: flow .
+   12 statement: flow .
 
-    $default  reduce using rule 13 (statement)
+    $default  reduce using rule 12 (statement)
 
 
 State 21
@@ -549,7 +549,7 @@ State 24
 
 State 25
 
-   72 arr_index: arr_expression . '[' arr_values ']'
+   71 arr_index: arr_expression . '[' arr_values ']'
    79 expression: arr_expression .
 
     '['  shift, and go to state 46
@@ -603,42 +603,42 @@ State 27
 
 State 28
 
-   26 declarations: DLET IDENTIFIER .
-   28             | DLET IDENTIFIER . ASSGNOP expression
+   25 declarations: DLET IDENTIFIER .
+   27             | DLET IDENTIFIER . ASSGNOP expression
 
     ASSGNOP  shift, and go to state 61
 
-    $default  reduce using rule 26 (declarations)
+    $default  reduce using rule 25 (declarations)
 
 
 State 29
 
-   30 declarations: DCONST IDENTIFIER . ASSGNOP expression
-   32             | DCONST IDENTIFIER . ASSGNOP $@5 anonymFunction
+   29 declarations: DCONST IDENTIFIER . ASSGNOP expression
+   31             | DCONST IDENTIFIER . ASSGNOP $@5 anonymFunction
 
     ASSGNOP  shift, and go to state 62
 
 
 State 30
 
-   27 declarations: DVAR IDENTIFIER .
-   29             | DVAR IDENTIFIER . ASSGNOP expression
+   26 declarations: DVAR IDENTIFIER .
+   28             | DVAR IDENTIFIER . ASSGNOP expression
 
     ASSGNOP  shift, and go to state 63
 
-    $default  reduce using rule 27 (declarations)
+    $default  reduce using rule 26 (declarations)
 
 
 State 31
 
-   35 declarations: DFUNC IDENTIFIER . '(' $@6 funcParamsNull ')' '{' $@7 program '}'
+   34 declarations: DFUNC IDENTIFIER . '(' $@6 funcParamsNull ')' '{' $@7 program '}'
 
     '('  shift, and go to state 64
 
 
 State 32
 
-   36 assigns: IDENTIFIER ASSGNOP . expression
+   35 assigns: IDENTIFIER ASSGNOP . expression
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -654,8 +654,8 @@ State 32
 
 State 33
 
-   37 assigns: IDENTIFIER '[' . arr_values ']' ASSGNOP expression
-   71 arr_index: IDENTIFIER '[' . arr_values ']'
+   36 assigns: IDENTIFIER '[' . arr_values ']' ASSGNOP expression
+   70 arr_index: IDENTIFIER '[' . arr_values ']'
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -672,7 +672,7 @@ State 33
 
 State 34
 
-   12 statement: IDENTIFIER '(' . funcArgsNull ')'
+   77 expression: IDENTIFIER '(' . funcArgsNull ')'
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -682,7 +682,7 @@ State 34
     '['         shift, and go to state 16
     ','         shift, and go to state 67
 
-    $default  reduce using rule 53 (funcArgsNull)
+    $default  reduce using rule 52 (funcArgsNull)
 
     funcArgsNull    go to state 68
     arr_expression  go to state 25
@@ -692,7 +692,7 @@ State 34
 
 State 35
 
-   59 conditional: CIF '(' . expression ')' '{' $@15 program $@16 '}' conditionalElse
+   58 conditional: CIF '(' . expression ')' '{' $@15 program $@16 '}' conditionalElse
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -708,18 +708,20 @@ State 35
 
 State 36
 
-   71 arr_index: IDENTIFIER . '[' arr_values ']'
-   77 expression: IDENTIFIER .
+   70 arr_index: IDENTIFIER . '[' arr_values ']'
+   76 expression: IDENTIFIER .
+   77           | IDENTIFIER . '(' funcArgsNull ')'
 
     '['  shift, and go to state 71
+    '('  shift, and go to state 34
 
-    '['       [reduce using rule 77 (expression)]
-    $default  reduce using rule 77 (expression)
+    '['       [reduce using rule 76 (expression)]
+    $default  reduce using rule 76 (expression)
 
 
 State 37
 
-   15 flow: FRETURN expression .
+   14 flow: FRETURN expression .
    80 expression: expression . NULLCOALESCING expression
    81           | expression . '?' expression ':' expression
    82           | expression . LOGAND expression
@@ -750,14 +752,14 @@ State 37
     '*'             shift, and go to state 59
     '/'             shift, and go to state 60
 
-    $default  reduce using rule 15 (flow)
+    $default  reduce using rule 14 (flow)
 
 
 State 38
 
-   19 loop: LFOR '(' . declarations SEMICOLON expression SEMICOLON assigns ')' '{' $@1 program '}'
-   21     | LFOR '(' . DLET IDENTIFIER LOF IDENTIFIER ')' '{' $@2 program '}'
-   23     | LFOR '(' . DLET IDENTIFIER LOF arr_expression ')' '{' $@3 program '}'
+   18 loop: LFOR '(' . declarations SEMICOLON expression SEMICOLON assigns ')' '{' $@1 program '}'
+   20     | LFOR '(' . DLET IDENTIFIER LOF IDENTIFIER ')' '{' $@2 program '}'
+   22     | LFOR '(' . DLET IDENTIFIER LOF arr_expression ')' '{' $@3 program '}'
 
     DLET    shift, and go to state 72
     DCONST  shift, and go to state 2
@@ -769,7 +771,7 @@ State 38
 
 State 39
 
-   25 loop: LWHILE '(' . expression ')' '{' $@4 program '}'
+   24 loop: LWHILE '(' . expression ')' '{' $@4 program '}'
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -785,22 +787,22 @@ State 39
 
 State 40
 
-   67 arr_expression: '[' ']' .
+   66 arr_expression: '[' ']' .
 
-    $default  reduce using rule 67 (arr_expression)
+    $default  reduce using rule 66 (arr_expression)
 
 
 State 41
 
-   68 arr_expression: '[' arr_values . ']'
+   67 arr_expression: '[' arr_values . ']'
 
     ']'  shift, and go to state 75
 
 
 State 42
 
-   69 arr_values: expression .
-   70           | expression . ',' arr_values
+   68 arr_values: expression .
+   69           | expression . ',' arr_values
    80 expression: expression . NULLCOALESCING expression
    81           | expression . '?' expression ':' expression
    82           | expression . LOGAND expression
@@ -832,7 +834,7 @@ State 42
     '/'             shift, and go to state 60
     ','             shift, and go to state 76
 
-    $default  reduce using rule 69 (arr_values)
+    $default  reduce using rule 68 (arr_values)
 
 
 State 43
@@ -887,7 +889,7 @@ State 45
 
 State 46
 
-   72 arr_index: arr_expression '[' . arr_values ']'
+   71 arr_index: arr_expression '[' . arr_values ']'
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -1128,7 +1130,7 @@ State 60
 
 State 61
 
-   28 declarations: DLET IDENTIFIER ASSGNOP . expression
+   27 declarations: DLET IDENTIFIER ASSGNOP . expression
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -1144,8 +1146,8 @@ State 61
 
 State 62
 
-   30 declarations: DCONST IDENTIFIER ASSGNOP . expression
-   32             | DCONST IDENTIFIER ASSGNOP . $@5 anonymFunction
+   29 declarations: DCONST IDENTIFIER ASSGNOP . expression
+   31             | DCONST IDENTIFIER ASSGNOP . $@5 anonymFunction
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -1154,7 +1156,7 @@ State 62
     IDENTIFIER  shift, and go to state 36
     '['         shift, and go to state 16
 
-    $default  reduce using rule 31 ($@5)
+    $default  reduce using rule 30 ($@5)
 
     $@5             go to state 94
     arr_expression  go to state 25
@@ -1164,7 +1166,7 @@ State 62
 
 State 63
 
-   29 declarations: DVAR IDENTIFIER ASSGNOP . expression
+   28 declarations: DVAR IDENTIFIER ASSGNOP . expression
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -1180,16 +1182,16 @@ State 63
 
 State 64
 
-   35 declarations: DFUNC IDENTIFIER '(' . $@6 funcParamsNull ')' '{' $@7 program '}'
+   34 declarations: DFUNC IDENTIFIER '(' . $@6 funcParamsNull ')' '{' $@7 program '}'
 
-    $default  reduce using rule 33 ($@6)
+    $default  reduce using rule 32 ($@6)
 
     $@6  go to state 97
 
 
 State 65
 
-   36 assigns: IDENTIFIER ASSGNOP expression .
+   35 assigns: IDENTIFIER ASSGNOP expression .
    80 expression: expression . NULLCOALESCING expression
    81           | expression . '?' expression ':' expression
    82           | expression . LOGAND expression
@@ -1220,20 +1222,20 @@ State 65
     '*'             shift, and go to state 59
     '/'             shift, and go to state 60
 
-    $default  reduce using rule 36 (assigns)
+    $default  reduce using rule 35 (assigns)
 
 
 State 66
 
-   37 assigns: IDENTIFIER '[' arr_values . ']' ASSGNOP expression
-   71 arr_index: IDENTIFIER '[' arr_values . ']'
+   36 assigns: IDENTIFIER '[' arr_values . ']' ASSGNOP expression
+   70 arr_index: IDENTIFIER '[' arr_values . ']'
 
     ']'  shift, and go to state 98
 
 
 State 67
 
-   56 funcArgsNull: ',' . funcArgsNull
+   55 funcArgsNull: ',' . funcArgsNull
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -1243,7 +1245,7 @@ State 67
     '['         shift, and go to state 16
     ','         shift, and go to state 67
 
-    $default  reduce using rule 53 (funcArgsNull)
+    $default  reduce using rule 52 (funcArgsNull)
 
     funcArgsNull    go to state 99
     arr_expression  go to state 25
@@ -1253,15 +1255,15 @@ State 67
 
 State 68
 
-   12 statement: IDENTIFIER '(' funcArgsNull . ')'
+   77 expression: IDENTIFIER '(' funcArgsNull . ')'
 
     ')'  shift, and go to state 100
 
 
 State 69
 
-   54 funcArgsNull: expression .
-   55             | expression . ',' funcArgsNull
+   53 funcArgsNull: expression .
+   54             | expression . ',' funcArgsNull
    80 expression: expression . NULLCOALESCING expression
    81           | expression . '?' expression ':' expression
    82           | expression . LOGAND expression
@@ -1293,12 +1295,12 @@ State 69
     '/'             shift, and go to state 60
     ','             shift, and go to state 101
 
-    $default  reduce using rule 54 (funcArgsNull)
+    $default  reduce using rule 53 (funcArgsNull)
 
 
 State 70
 
-   59 conditional: CIF '(' expression . ')' '{' $@15 program $@16 '}' conditionalElse
+   58 conditional: CIF '(' expression . ')' '{' $@15 program $@16 '}' conditionalElse
    80 expression: expression . NULLCOALESCING expression
    81           | expression . '?' expression ':' expression
    82           | expression . LOGAND expression
@@ -1333,7 +1335,7 @@ State 70
 
 State 71
 
-   71 arr_index: IDENTIFIER '[' . arr_values ']'
+   70 arr_index: IDENTIFIER '[' . arr_values ']'
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -1350,24 +1352,24 @@ State 71
 
 State 72
 
-   21 loop: LFOR '(' DLET . IDENTIFIER LOF IDENTIFIER ')' '{' $@2 program '}'
-   23     | LFOR '(' DLET . IDENTIFIER LOF arr_expression ')' '{' $@3 program '}'
-   26 declarations: DLET . IDENTIFIER
-   28             | DLET . IDENTIFIER ASSGNOP expression
+   20 loop: LFOR '(' DLET . IDENTIFIER LOF IDENTIFIER ')' '{' $@2 program '}'
+   22     | LFOR '(' DLET . IDENTIFIER LOF arr_expression ')' '{' $@3 program '}'
+   25 declarations: DLET . IDENTIFIER
+   27             | DLET . IDENTIFIER ASSGNOP expression
 
     IDENTIFIER  shift, and go to state 104
 
 
 State 73
 
-   19 loop: LFOR '(' declarations . SEMICOLON expression SEMICOLON assigns ')' '{' $@1 program '}'
+   18 loop: LFOR '(' declarations . SEMICOLON expression SEMICOLON assigns ')' '{' $@1 program '}'
 
     SEMICOLON  shift, and go to state 105
 
 
 State 74
 
-   25 loop: LWHILE '(' expression . ')' '{' $@4 program '}'
+   24 loop: LWHILE '(' expression . ')' '{' $@4 program '}'
    80 expression: expression . NULLCOALESCING expression
    81           | expression . '?' expression ':' expression
    82           | expression . LOGAND expression
@@ -1402,14 +1404,14 @@ State 74
 
 State 75
 
-   68 arr_expression: '[' arr_values ']' .
+   67 arr_expression: '[' arr_values ']' .
 
-    $default  reduce using rule 68 (arr_expression)
+    $default  reduce using rule 67 (arr_expression)
 
 
 State 76
 
-   70 arr_values: expression ',' . arr_values
+   69 arr_values: expression ',' . arr_values
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -1433,7 +1435,7 @@ State 77
 
 State 78
 
-   72 arr_index: arr_expression '[' arr_values . ']'
+   71 arr_index: arr_expression '[' arr_values . ']'
 
     ']'  shift, and go to state 108
 
@@ -1817,7 +1819,7 @@ State 92
 
 State 93
 
-   28 declarations: DLET IDENTIFIER ASSGNOP expression .
+   27 declarations: DLET IDENTIFIER ASSGNOP expression .
    80 expression: expression . NULLCOALESCING expression
    81           | expression . '?' expression ':' expression
    82           | expression . LOGAND expression
@@ -1848,12 +1850,12 @@ State 93
     '*'             shift, and go to state 59
     '/'             shift, and go to state 60
 
-    $default  reduce using rule 28 (declarations)
+    $default  reduce using rule 27 (declarations)
 
 
 State 94
 
-   32 declarations: DCONST IDENTIFIER ASSGNOP $@5 . anonymFunction
+   31 declarations: DCONST IDENTIFIER ASSGNOP $@5 . anonymFunction
 
     DFUNC  shift, and go to state 110
     '('    shift, and go to state 111
@@ -1863,43 +1865,7 @@ State 94
 
 State 95
 
-   30 declarations: DCONST IDENTIFIER ASSGNOP expression .
-   80 expression: expression . NULLCOALESCING expression
-   81           | expression . '?' expression ':' expression
-   82           | expression . LOGAND expression
-   83           | expression . LOGOR expression
-   84           | expression . EXPGT expression
-   85           | expression . EXPLT expression
-   86           | expression . EXPEQ expression
-   87           | expression . EXPDF expression
-   88           | expression . '<' expression
-   89           | expression . '>' expression
-   90           | expression . '+' expression
-   91           | expression . '-' expression
-   92           | expression . '*' expression
-   93           | expression . '/' expression
-
-    EXPGT           shift, and go to state 47
-    EXPLT           shift, and go to state 48
-    EXPEQ           shift, and go to state 49
-    EXPDF           shift, and go to state 50
-    NULLCOALESCING  shift, and go to state 51
-    LOGOR           shift, and go to state 52
-    LOGAND          shift, and go to state 53
-    '?'             shift, and go to state 54
-    '>'             shift, and go to state 55
-    '<'             shift, and go to state 56
-    '-'             shift, and go to state 57
-    '+'             shift, and go to state 58
-    '*'             shift, and go to state 59
-    '/'             shift, and go to state 60
-
-    $default  reduce using rule 30 (declarations)
-
-
-State 96
-
-   29 declarations: DVAR IDENTIFIER ASSGNOP expression .
+   29 declarations: DCONST IDENTIFIER ASSGNOP expression .
    80 expression: expression . NULLCOALESCING expression
    81           | expression . '?' expression ':' expression
    82           | expression . LOGAND expression
@@ -1933,13 +1899,49 @@ State 96
     $default  reduce using rule 29 (declarations)
 
 
+State 96
+
+   28 declarations: DVAR IDENTIFIER ASSGNOP expression .
+   80 expression: expression . NULLCOALESCING expression
+   81           | expression . '?' expression ':' expression
+   82           | expression . LOGAND expression
+   83           | expression . LOGOR expression
+   84           | expression . EXPGT expression
+   85           | expression . EXPLT expression
+   86           | expression . EXPEQ expression
+   87           | expression . EXPDF expression
+   88           | expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . '+' expression
+   91           | expression . '-' expression
+   92           | expression . '*' expression
+   93           | expression . '/' expression
+
+    EXPGT           shift, and go to state 47
+    EXPLT           shift, and go to state 48
+    EXPEQ           shift, and go to state 49
+    EXPDF           shift, and go to state 50
+    NULLCOALESCING  shift, and go to state 51
+    LOGOR           shift, and go to state 52
+    LOGAND          shift, and go to state 53
+    '?'             shift, and go to state 54
+    '>'             shift, and go to state 55
+    '<'             shift, and go to state 56
+    '-'             shift, and go to state 57
+    '+'             shift, and go to state 58
+    '*'             shift, and go to state 59
+    '/'             shift, and go to state 60
+
+    $default  reduce using rule 28 (declarations)
+
+
 State 97
 
-   35 declarations: DFUNC IDENTIFIER '(' $@6 . funcParamsNull ')' '{' $@7 program '}'
+   34 declarations: DFUNC IDENTIFIER '(' $@6 . funcParamsNull ')' '{' $@7 program '}'
 
     IDENTIFIER  shift, and go to state 113
 
-    $default  reduce using rule 43 (funcParamsNull)
+    $default  reduce using rule 42 (funcParamsNull)
 
     assigns         go to state 114
     funcParamsNull  go to state 115
@@ -1948,31 +1950,31 @@ State 97
 
 State 98
 
-   37 assigns: IDENTIFIER '[' arr_values ']' . ASSGNOP expression
-   71 arr_index: IDENTIFIER '[' arr_values ']' .
+   36 assigns: IDENTIFIER '[' arr_values ']' . ASSGNOP expression
+   70 arr_index: IDENTIFIER '[' arr_values ']' .
 
     ASSGNOP  shift, and go to state 117
 
-    $default  reduce using rule 71 (arr_index)
+    $default  reduce using rule 70 (arr_index)
 
 
 State 99
 
-   56 funcArgsNull: ',' funcArgsNull .
+   55 funcArgsNull: ',' funcArgsNull .
 
-    $default  reduce using rule 56 (funcArgsNull)
+    $default  reduce using rule 55 (funcArgsNull)
 
 
 State 100
 
-   12 statement: IDENTIFIER '(' funcArgsNull ')' .
+   77 expression: IDENTIFIER '(' funcArgsNull ')' .
 
-    $default  reduce using rule 12 (statement)
+    $default  reduce using rule 77 (expression)
 
 
 State 101
 
-   55 funcArgsNull: expression ',' . funcArgsNull
+   54 funcArgsNull: expression ',' . funcArgsNull
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -1982,7 +1984,7 @@ State 101
     '['         shift, and go to state 16
     ','         shift, and go to state 67
 
-    $default  reduce using rule 53 (funcArgsNull)
+    $default  reduce using rule 52 (funcArgsNull)
 
     funcArgsNull    go to state 118
     arr_expression  go to state 25
@@ -1992,34 +1994,34 @@ State 101
 
 State 102
 
-   59 conditional: CIF '(' expression ')' . '{' $@15 program $@16 '}' conditionalElse
+   58 conditional: CIF '(' expression ')' . '{' $@15 program $@16 '}' conditionalElse
 
     '{'  shift, and go to state 119
 
 
 State 103
 
-   71 arr_index: IDENTIFIER '[' arr_values . ']'
+   70 arr_index: IDENTIFIER '[' arr_values . ']'
 
     ']'  shift, and go to state 120
 
 
 State 104
 
-   21 loop: LFOR '(' DLET IDENTIFIER . LOF IDENTIFIER ')' '{' $@2 program '}'
-   23     | LFOR '(' DLET IDENTIFIER . LOF arr_expression ')' '{' $@3 program '}'
-   26 declarations: DLET IDENTIFIER .
-   28             | DLET IDENTIFIER . ASSGNOP expression
+   20 loop: LFOR '(' DLET IDENTIFIER . LOF IDENTIFIER ')' '{' $@2 program '}'
+   22     | LFOR '(' DLET IDENTIFIER . LOF arr_expression ')' '{' $@3 program '}'
+   25 declarations: DLET IDENTIFIER .
+   27             | DLET IDENTIFIER . ASSGNOP expression
 
     ASSGNOP  shift, and go to state 61
     LOF      shift, and go to state 121
 
-    $default  reduce using rule 26 (declarations)
+    $default  reduce using rule 25 (declarations)
 
 
 State 105
 
-   19 loop: LFOR '(' declarations SEMICOLON . expression SEMICOLON assigns ')' '{' $@1 program '}'
+   18 loop: LFOR '(' declarations SEMICOLON . expression SEMICOLON assigns ')' '{' $@1 program '}'
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -2035,23 +2037,23 @@ State 105
 
 State 106
 
-   25 loop: LWHILE '(' expression ')' . '{' $@4 program '}'
+   24 loop: LWHILE '(' expression ')' . '{' $@4 program '}'
 
     '{'  shift, and go to state 123
 
 
 State 107
 
-   70 arr_values: expression ',' arr_values .
+   69 arr_values: expression ',' arr_values .
 
-    $default  reduce using rule 70 (arr_values)
+    $default  reduce using rule 69 (arr_values)
 
 
 State 108
 
-   72 arr_index: arr_expression '[' arr_values ']' .
+   71 arr_index: arr_expression '[' arr_values ']' .
 
-    $default  reduce using rule 72 (arr_index)
+    $default  reduce using rule 71 (arr_index)
 
 
 State 109
@@ -2072,18 +2074,18 @@ State 109
 
 State 110
 
-   40 anonymFunction: DFUNC . '(' $@8 funcParamsNull ')' '{' $@9 program '}'
+   39 anonymFunction: DFUNC . '(' $@8 funcParamsNull ')' '{' $@9 program '}'
 
     '('  shift, and go to state 125
 
 
 State 111
 
-   42 anonymFunction: '(' . funcParamsNull ')' DAFUNC '{' $@10 program '}'
+   41 anonymFunction: '(' . funcParamsNull ')' DAFUNC '{' $@10 program '}'
 
     IDENTIFIER  shift, and go to state 113
 
-    $default  reduce using rule 43 (funcParamsNull)
+    $default  reduce using rule 42 (funcParamsNull)
 
     assigns         go to state 114
     funcParamsNull  go to state 126
@@ -2092,55 +2094,55 @@ State 111
 
 State 112
 
-   32 declarations: DCONST IDENTIFIER ASSGNOP $@5 anonymFunction .
+   31 declarations: DCONST IDENTIFIER ASSGNOP $@5 anonymFunction .
 
-    $default  reduce using rule 32 (declarations)
+    $default  reduce using rule 31 (declarations)
 
 
 State 113
 
-   36 assigns: IDENTIFIER . ASSGNOP expression
-   37        | IDENTIFIER . '[' arr_values ']' ASSGNOP expression
-   45 funcParams: IDENTIFIER .
-   49           | IDENTIFIER . $@11 ',' $@12 funcParams
+   35 assigns: IDENTIFIER . ASSGNOP expression
+   36        | IDENTIFIER . '[' arr_values ']' ASSGNOP expression
+   44 funcParams: IDENTIFIER .
+   48           | IDENTIFIER . $@11 ',' $@12 funcParams
 
     ASSGNOP  shift, and go to state 32
     '['      shift, and go to state 127
 
-    ','       reduce using rule 47 ($@11)
-    $default  reduce using rule 45 (funcParams)
+    ','       reduce using rule 46 ($@11)
+    $default  reduce using rule 44 (funcParams)
 
     $@11  go to state 128
 
 
 State 114
 
-   46 funcParams: assigns .
-   52           | assigns . $@13 ',' $@14 funcParams
+   45 funcParams: assigns .
+   51           | assigns . $@13 ',' $@14 funcParams
 
-    ','       reduce using rule 50 ($@13)
-    $default  reduce using rule 46 (funcParams)
+    ','       reduce using rule 49 ($@13)
+    $default  reduce using rule 45 (funcParams)
 
     $@13  go to state 129
 
 
 State 115
 
-   35 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull . ')' '{' $@7 program '}'
+   34 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull . ')' '{' $@7 program '}'
 
     ')'  shift, and go to state 130
 
 
 State 116
 
-   44 funcParamsNull: funcParams .
+   43 funcParamsNull: funcParams .
 
-    $default  reduce using rule 44 (funcParamsNull)
+    $default  reduce using rule 43 (funcParamsNull)
 
 
 State 117
 
-   37 assigns: IDENTIFIER '[' arr_values ']' ASSGNOP . expression
+   36 assigns: IDENTIFIER '[' arr_values ']' ASSGNOP . expression
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -2156,31 +2158,31 @@ State 117
 
 State 118
 
-   55 funcArgsNull: expression ',' funcArgsNull .
+   54 funcArgsNull: expression ',' funcArgsNull .
 
-    $default  reduce using rule 55 (funcArgsNull)
+    $default  reduce using rule 54 (funcArgsNull)
 
 
 State 119
 
-   59 conditional: CIF '(' expression ')' '{' . $@15 program $@16 '}' conditionalElse
+   58 conditional: CIF '(' expression ')' '{' . $@15 program $@16 '}' conditionalElse
 
-    $default  reduce using rule 57 ($@15)
+    $default  reduce using rule 56 ($@15)
 
     $@15  go to state 132
 
 
 State 120
 
-   71 arr_index: IDENTIFIER '[' arr_values ']' .
+   70 arr_index: IDENTIFIER '[' arr_values ']' .
 
-    $default  reduce using rule 71 (arr_index)
+    $default  reduce using rule 70 (arr_index)
 
 
 State 121
 
-   21 loop: LFOR '(' DLET IDENTIFIER LOF . IDENTIFIER ')' '{' $@2 program '}'
-   23     | LFOR '(' DLET IDENTIFIER LOF . arr_expression ')' '{' $@3 program '}'
+   20 loop: LFOR '(' DLET IDENTIFIER LOF . IDENTIFIER ')' '{' $@2 program '}'
+   22     | LFOR '(' DLET IDENTIFIER LOF . arr_expression ')' '{' $@3 program '}'
 
     IDENTIFIER  shift, and go to state 133
     '['         shift, and go to state 16
@@ -2190,7 +2192,7 @@ State 121
 
 State 122
 
-   19 loop: LFOR '(' declarations SEMICOLON expression . SEMICOLON assigns ')' '{' $@1 program '}'
+   18 loop: LFOR '(' declarations SEMICOLON expression . SEMICOLON assigns ')' '{' $@1 program '}'
    80 expression: expression . NULLCOALESCING expression
    81           | expression . '?' expression ':' expression
    82           | expression . LOGAND expression
@@ -2225,9 +2227,9 @@ State 122
 
 State 123
 
-   25 loop: LWHILE '(' expression ')' '{' . $@4 program '}'
+   24 loop: LWHILE '(' expression ')' '{' . $@4 program '}'
 
-    $default  reduce using rule 24 ($@4)
+    $default  reduce using rule 23 ($@4)
 
     $@4  go to state 136
 
@@ -2266,23 +2268,23 @@ State 124
 
 State 125
 
-   40 anonymFunction: DFUNC '(' . $@8 funcParamsNull ')' '{' $@9 program '}'
+   39 anonymFunction: DFUNC '(' . $@8 funcParamsNull ')' '{' $@9 program '}'
 
-    $default  reduce using rule 38 ($@8)
+    $default  reduce using rule 37 ($@8)
 
     $@8  go to state 137
 
 
 State 126
 
-   42 anonymFunction: '(' funcParamsNull . ')' DAFUNC '{' $@10 program '}'
+   41 anonymFunction: '(' funcParamsNull . ')' DAFUNC '{' $@10 program '}'
 
     ')'  shift, and go to state 138
 
 
 State 127
 
-   37 assigns: IDENTIFIER '[' . arr_values ']' ASSGNOP expression
+   36 assigns: IDENTIFIER '[' . arr_values ']' ASSGNOP expression
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -2299,28 +2301,28 @@ State 127
 
 State 128
 
-   49 funcParams: IDENTIFIER $@11 . ',' $@12 funcParams
+   48 funcParams: IDENTIFIER $@11 . ',' $@12 funcParams
 
     ','  shift, and go to state 140
 
 
 State 129
 
-   52 funcParams: assigns $@13 . ',' $@14 funcParams
+   51 funcParams: assigns $@13 . ',' $@14 funcParams
 
     ','  shift, and go to state 141
 
 
 State 130
 
-   35 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull ')' . '{' $@7 program '}'
+   34 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull ')' . '{' $@7 program '}'
 
     '{'  shift, and go to state 142
 
 
 State 131
 
-   37 assigns: IDENTIFIER '[' arr_values ']' ASSGNOP expression .
+   36 assigns: IDENTIFIER '[' arr_values ']' ASSGNOP expression .
    80 expression: expression . NULLCOALESCING expression
    81           | expression . '?' expression ':' expression
    82           | expression . LOGAND expression
@@ -2351,12 +2353,12 @@ State 131
     '*'             shift, and go to state 59
     '/'             shift, and go to state 60
 
-    $default  reduce using rule 37 (assigns)
+    $default  reduce using rule 36 (assigns)
 
 
 State 132
 
-   59 conditional: CIF '(' expression ')' '{' $@15 . program $@16 '}' conditionalElse
+   58 conditional: CIF '(' expression ')' '{' $@15 . program $@16 '}' conditionalElse
 
     DLET        shift, and go to state 1
     DCONST      shift, and go to state 2
@@ -2389,21 +2391,21 @@ State 132
 
 State 133
 
-   21 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER . ')' '{' $@2 program '}'
+   20 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER . ')' '{' $@2 program '}'
 
     ')'  shift, and go to state 144
 
 
 State 134
 
-   23 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression . ')' '{' $@3 program '}'
+   22 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression . ')' '{' $@3 program '}'
 
     ')'  shift, and go to state 145
 
 
 State 135
 
-   19 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON . assigns ')' '{' $@1 program '}'
+   18 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON . assigns ')' '{' $@1 program '}'
 
     IDENTIFIER  shift, and go to state 146
 
@@ -2412,7 +2414,7 @@ State 135
 
 State 136
 
-   25 loop: LWHILE '(' expression ')' '{' $@4 . program '}'
+   24 loop: LWHILE '(' expression ')' '{' $@4 . program '}'
 
     DLET        shift, and go to state 1
     DCONST      shift, and go to state 2
@@ -2445,11 +2447,11 @@ State 136
 
 State 137
 
-   40 anonymFunction: DFUNC '(' $@8 . funcParamsNull ')' '{' $@9 program '}'
+   39 anonymFunction: DFUNC '(' $@8 . funcParamsNull ')' '{' $@9 program '}'
 
     IDENTIFIER  shift, and go to state 113
 
-    $default  reduce using rule 43 (funcParamsNull)
+    $default  reduce using rule 42 (funcParamsNull)
 
     assigns         go to state 114
     funcParamsNull  go to state 149
@@ -2458,72 +2460,72 @@ State 137
 
 State 138
 
-   42 anonymFunction: '(' funcParamsNull ')' . DAFUNC '{' $@10 program '}'
+   41 anonymFunction: '(' funcParamsNull ')' . DAFUNC '{' $@10 program '}'
 
     DAFUNC  shift, and go to state 150
 
 
 State 139
 
-   37 assigns: IDENTIFIER '[' arr_values . ']' ASSGNOP expression
+   36 assigns: IDENTIFIER '[' arr_values . ']' ASSGNOP expression
 
     ']'  shift, and go to state 151
 
 
 State 140
 
-   49 funcParams: IDENTIFIER $@11 ',' . $@12 funcParams
+   48 funcParams: IDENTIFIER $@11 ',' . $@12 funcParams
 
-    $default  reduce using rule 48 ($@12)
+    $default  reduce using rule 47 ($@12)
 
     $@12  go to state 152
 
 
 State 141
 
-   52 funcParams: assigns $@13 ',' . $@14 funcParams
+   51 funcParams: assigns $@13 ',' . $@14 funcParams
 
-    $default  reduce using rule 51 ($@14)
+    $default  reduce using rule 50 ($@14)
 
     $@14  go to state 153
 
 
 State 142
 
-   35 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull ')' '{' . $@7 program '}'
+   34 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull ')' '{' . $@7 program '}'
 
-    $default  reduce using rule 34 ($@7)
+    $default  reduce using rule 33 ($@7)
 
     $@7  go to state 154
 
 
 State 143
 
-   59 conditional: CIF '(' expression ')' '{' $@15 program . $@16 '}' conditionalElse
+   58 conditional: CIF '(' expression ')' '{' $@15 program . $@16 '}' conditionalElse
 
-    $default  reduce using rule 58 ($@16)
+    $default  reduce using rule 57 ($@16)
 
     $@16  go to state 155
 
 
 State 144
 
-   21 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' . '{' $@2 program '}'
+   20 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' . '{' $@2 program '}'
 
     '{'  shift, and go to state 156
 
 
 State 145
 
-   23 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression ')' . '{' $@3 program '}'
+   22 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression ')' . '{' $@3 program '}'
 
     '{'  shift, and go to state 157
 
 
 State 146
 
-   36 assigns: IDENTIFIER . ASSGNOP expression
-   37        | IDENTIFIER . '[' arr_values ']' ASSGNOP expression
+   35 assigns: IDENTIFIER . ASSGNOP expression
+   36        | IDENTIFIER . '[' arr_values ']' ASSGNOP expression
 
     ASSGNOP  shift, and go to state 32
     '['      shift, and go to state 127
@@ -2531,42 +2533,42 @@ State 146
 
 State 147
 
-   19 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns . ')' '{' $@1 program '}'
+   18 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns . ')' '{' $@1 program '}'
 
     ')'  shift, and go to state 158
 
 
 State 148
 
-   25 loop: LWHILE '(' expression ')' '{' $@4 program . '}'
+   24 loop: LWHILE '(' expression ')' '{' $@4 program . '}'
 
     '}'  shift, and go to state 159
 
 
 State 149
 
-   40 anonymFunction: DFUNC '(' $@8 funcParamsNull . ')' '{' $@9 program '}'
+   39 anonymFunction: DFUNC '(' $@8 funcParamsNull . ')' '{' $@9 program '}'
 
     ')'  shift, and go to state 160
 
 
 State 150
 
-   42 anonymFunction: '(' funcParamsNull ')' DAFUNC . '{' $@10 program '}'
+   41 anonymFunction: '(' funcParamsNull ')' DAFUNC . '{' $@10 program '}'
 
     '{'  shift, and go to state 161
 
 
 State 151
 
-   37 assigns: IDENTIFIER '[' arr_values ']' . ASSGNOP expression
+   36 assigns: IDENTIFIER '[' arr_values ']' . ASSGNOP expression
 
     ASSGNOP  shift, and go to state 117
 
 
 State 152
 
-   49 funcParams: IDENTIFIER $@11 ',' $@12 . funcParams
+   48 funcParams: IDENTIFIER $@11 ',' $@12 . funcParams
 
     IDENTIFIER  shift, and go to state 113
 
@@ -2576,7 +2578,7 @@ State 152
 
 State 153
 
-   52 funcParams: assigns $@13 ',' $@14 . funcParams
+   51 funcParams: assigns $@13 ',' $@14 . funcParams
 
     IDENTIFIER  shift, and go to state 113
 
@@ -2586,7 +2588,7 @@ State 153
 
 State 154
 
-   35 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull ')' '{' $@7 . program '}'
+   34 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull ')' '{' $@7 . program '}'
 
     DLET        shift, and go to state 1
     DCONST      shift, and go to state 2
@@ -2619,94 +2621,94 @@ State 154
 
 State 155
 
-   59 conditional: CIF '(' expression ')' '{' $@15 program $@16 . '}' conditionalElse
+   58 conditional: CIF '(' expression ')' '{' $@15 program $@16 . '}' conditionalElse
 
     '}'  shift, and go to state 165
 
 
 State 156
 
-   21 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' . $@2 program '}'
+   20 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' . $@2 program '}'
 
-    $default  reduce using rule 20 ($@2)
+    $default  reduce using rule 19 ($@2)
 
     $@2  go to state 166
 
 
 State 157
 
-   23 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression ')' '{' . $@3 program '}'
+   22 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression ')' '{' . $@3 program '}'
 
-    $default  reduce using rule 22 ($@3)
+    $default  reduce using rule 21 ($@3)
 
     $@3  go to state 167
 
 
 State 158
 
-   19 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' . '{' $@1 program '}'
+   18 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' . '{' $@1 program '}'
 
     '{'  shift, and go to state 168
 
 
 State 159
 
-   25 loop: LWHILE '(' expression ')' '{' $@4 program '}' .
+   24 loop: LWHILE '(' expression ')' '{' $@4 program '}' .
 
-    $default  reduce using rule 25 (loop)
+    $default  reduce using rule 24 (loop)
 
 
 State 160
 
-   40 anonymFunction: DFUNC '(' $@8 funcParamsNull ')' . '{' $@9 program '}'
+   39 anonymFunction: DFUNC '(' $@8 funcParamsNull ')' . '{' $@9 program '}'
 
     '{'  shift, and go to state 169
 
 
 State 161
 
-   42 anonymFunction: '(' funcParamsNull ')' DAFUNC '{' . $@10 program '}'
+   41 anonymFunction: '(' funcParamsNull ')' DAFUNC '{' . $@10 program '}'
 
-    $default  reduce using rule 41 ($@10)
+    $default  reduce using rule 40 ($@10)
 
     $@10  go to state 170
 
 
 State 162
 
-   49 funcParams: IDENTIFIER $@11 ',' $@12 funcParams .
+   48 funcParams: IDENTIFIER $@11 ',' $@12 funcParams .
 
-    $default  reduce using rule 49 (funcParams)
+    $default  reduce using rule 48 (funcParams)
 
 
 State 163
 
-   52 funcParams: assigns $@13 ',' $@14 funcParams .
+   51 funcParams: assigns $@13 ',' $@14 funcParams .
 
-    $default  reduce using rule 52 (funcParams)
+    $default  reduce using rule 51 (funcParams)
 
 
 State 164
 
-   35 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull ')' '{' $@7 program . '}'
+   34 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull ')' '{' $@7 program . '}'
 
     '}'  shift, and go to state 171
 
 
 State 165
 
-   59 conditional: CIF '(' expression ')' '{' $@15 program $@16 '}' . conditionalElse
+   58 conditional: CIF '(' expression ')' '{' $@15 program $@16 '}' . conditionalElse
 
     CELSE  shift, and go to state 172
 
-    $default  reduce using rule 60 (conditionalElse)
+    $default  reduce using rule 59 (conditionalElse)
 
     conditionalElse  go to state 173
 
 
 State 166
 
-   21 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' $@2 . program '}'
+   20 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' $@2 . program '}'
 
     DLET        shift, and go to state 1
     DCONST      shift, and go to state 2
@@ -2739,7 +2741,7 @@ State 166
 
 State 167
 
-   23 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression ')' '{' $@3 . program '}'
+   22 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression ')' '{' $@3 . program '}'
 
     DLET        shift, and go to state 1
     DCONST      shift, and go to state 2
@@ -2772,25 +2774,25 @@ State 167
 
 State 168
 
-   19 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' . $@1 program '}'
+   18 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' . $@1 program '}'
 
-    $default  reduce using rule 18 ($@1)
+    $default  reduce using rule 17 ($@1)
 
     $@1  go to state 176
 
 
 State 169
 
-   40 anonymFunction: DFUNC '(' $@8 funcParamsNull ')' '{' . $@9 program '}'
+   39 anonymFunction: DFUNC '(' $@8 funcParamsNull ')' '{' . $@9 program '}'
 
-    $default  reduce using rule 39 ($@9)
+    $default  reduce using rule 38 ($@9)
 
     $@9  go to state 177
 
 
 State 170
 
-   42 anonymFunction: '(' funcParamsNull ')' DAFUNC '{' $@10 . program '}'
+   41 anonymFunction: '(' funcParamsNull ')' DAFUNC '{' $@10 . program '}'
 
     DLET        shift, and go to state 1
     DCONST      shift, and go to state 2
@@ -2823,15 +2825,15 @@ State 170
 
 State 171
 
-   35 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull ')' '{' $@7 program '}' .
+   34 declarations: DFUNC IDENTIFIER '(' $@6 funcParamsNull ')' '{' $@7 program '}' .
 
-    $default  reduce using rule 35 (declarations)
+    $default  reduce using rule 34 (declarations)
 
 
 State 172
 
-   63 conditionalElse: CELSE . '{' $@17 program $@18 '}'
-   66                | CELSE . CIF '(' expression ')' '{' $@19 program $@20 '}' conditionalElse
+   62 conditionalElse: CELSE . '{' $@17 program $@18 '}'
+   65                | CELSE . CIF '(' expression ')' '{' $@19 program $@20 '}' conditionalElse
 
     CIF  shift, and go to state 179
     '{'  shift, and go to state 180
@@ -2839,28 +2841,28 @@ State 172
 
 State 173
 
-   59 conditional: CIF '(' expression ')' '{' $@15 program $@16 '}' conditionalElse .
+   58 conditional: CIF '(' expression ')' '{' $@15 program $@16 '}' conditionalElse .
 
-    $default  reduce using rule 59 (conditional)
+    $default  reduce using rule 58 (conditional)
 
 
 State 174
 
-   21 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' $@2 program . '}'
+   20 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' $@2 program . '}'
 
     '}'  shift, and go to state 181
 
 
 State 175
 
-   23 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression ')' '{' $@3 program . '}'
+   22 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression ')' '{' $@3 program . '}'
 
     '}'  shift, and go to state 182
 
 
 State 176
 
-   19 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' $@1 . program '}'
+   18 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' $@1 . program '}'
 
     DLET        shift, and go to state 1
     DCONST      shift, and go to state 2
@@ -2893,7 +2895,7 @@ State 176
 
 State 177
 
-   40 anonymFunction: DFUNC '(' $@8 funcParamsNull ')' '{' $@9 . program '}'
+   39 anonymFunction: DFUNC '(' $@8 funcParamsNull ')' '{' $@9 . program '}'
 
     DLET        shift, and go to state 1
     DCONST      shift, and go to state 2
@@ -2926,65 +2928,65 @@ State 177
 
 State 178
 
-   42 anonymFunction: '(' funcParamsNull ')' DAFUNC '{' $@10 program . '}'
+   41 anonymFunction: '(' funcParamsNull ')' DAFUNC '{' $@10 program . '}'
 
     '}'  shift, and go to state 185
 
 
 State 179
 
-   66 conditionalElse: CELSE CIF . '(' expression ')' '{' $@19 program $@20 '}' conditionalElse
+   65 conditionalElse: CELSE CIF . '(' expression ')' '{' $@19 program $@20 '}' conditionalElse
 
     '('  shift, and go to state 186
 
 
 State 180
 
-   63 conditionalElse: CELSE '{' . $@17 program $@18 '}'
+   62 conditionalElse: CELSE '{' . $@17 program $@18 '}'
 
-    $default  reduce using rule 61 ($@17)
+    $default  reduce using rule 60 ($@17)
 
     $@17  go to state 187
 
 
 State 181
 
-   21 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' $@2 program '}' .
+   20 loop: LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' $@2 program '}' .
 
-    $default  reduce using rule 21 (loop)
+    $default  reduce using rule 20 (loop)
 
 
 State 182
 
-   23 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression ')' '{' $@3 program '}' .
+   22 loop: LFOR '(' DLET IDENTIFIER LOF arr_expression ')' '{' $@3 program '}' .
 
-    $default  reduce using rule 23 (loop)
+    $default  reduce using rule 22 (loop)
 
 
 State 183
 
-   19 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' $@1 program . '}'
+   18 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' $@1 program . '}'
 
     '}'  shift, and go to state 188
 
 
 State 184
 
-   40 anonymFunction: DFUNC '(' $@8 funcParamsNull ')' '{' $@9 program . '}'
+   39 anonymFunction: DFUNC '(' $@8 funcParamsNull ')' '{' $@9 program . '}'
 
     '}'  shift, and go to state 189
 
 
 State 185
 
-   42 anonymFunction: '(' funcParamsNull ')' DAFUNC '{' $@10 program '}' .
+   41 anonymFunction: '(' funcParamsNull ')' DAFUNC '{' $@10 program '}' .
 
-    $default  reduce using rule 42 (anonymFunction)
+    $default  reduce using rule 41 (anonymFunction)
 
 
 State 186
 
-   66 conditionalElse: CELSE CIF '(' . expression ')' '{' $@19 program $@20 '}' conditionalElse
+   65 conditionalElse: CELSE CIF '(' . expression ')' '{' $@19 program $@20 '}' conditionalElse
 
     VSTR        shift, and go to state 5
     VINT        shift, and go to state 6
@@ -3000,7 +3002,7 @@ State 186
 
 State 187
 
-   63 conditionalElse: CELSE '{' $@17 . program $@18 '}'
+   62 conditionalElse: CELSE '{' $@17 . program $@18 '}'
 
     DLET        shift, and go to state 1
     DCONST      shift, and go to state 2
@@ -3033,21 +3035,21 @@ State 187
 
 State 188
 
-   19 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' $@1 program '}' .
+   18 loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' $@1 program '}' .
 
-    $default  reduce using rule 19 (loop)
+    $default  reduce using rule 18 (loop)
 
 
 State 189
 
-   40 anonymFunction: DFUNC '(' $@8 funcParamsNull ')' '{' $@9 program '}' .
+   39 anonymFunction: DFUNC '(' $@8 funcParamsNull ')' '{' $@9 program '}' .
 
-    $default  reduce using rule 40 (anonymFunction)
+    $default  reduce using rule 39 (anonymFunction)
 
 
 State 190
 
-   66 conditionalElse: CELSE CIF '(' expression . ')' '{' $@19 program $@20 '}' conditionalElse
+   65 conditionalElse: CELSE CIF '(' expression . ')' '{' $@19 program $@20 '}' conditionalElse
    80 expression: expression . NULLCOALESCING expression
    81           | expression . '?' expression ':' expression
    82           | expression . LOGAND expression
@@ -3082,46 +3084,46 @@ State 190
 
 State 191
 
-   63 conditionalElse: CELSE '{' $@17 program . $@18 '}'
+   62 conditionalElse: CELSE '{' $@17 program . $@18 '}'
 
-    $default  reduce using rule 62 ($@18)
+    $default  reduce using rule 61 ($@18)
 
     $@18  go to state 193
 
 
 State 192
 
-   66 conditionalElse: CELSE CIF '(' expression ')' . '{' $@19 program $@20 '}' conditionalElse
+   65 conditionalElse: CELSE CIF '(' expression ')' . '{' $@19 program $@20 '}' conditionalElse
 
     '{'  shift, and go to state 194
 
 
 State 193
 
-   63 conditionalElse: CELSE '{' $@17 program $@18 . '}'
+   62 conditionalElse: CELSE '{' $@17 program $@18 . '}'
 
     '}'  shift, and go to state 195
 
 
 State 194
 
-   66 conditionalElse: CELSE CIF '(' expression ')' '{' . $@19 program $@20 '}' conditionalElse
+   65 conditionalElse: CELSE CIF '(' expression ')' '{' . $@19 program $@20 '}' conditionalElse
 
-    $default  reduce using rule 64 ($@19)
+    $default  reduce using rule 63 ($@19)
 
     $@19  go to state 196
 
 
 State 195
 
-   63 conditionalElse: CELSE '{' $@17 program $@18 '}' .
+   62 conditionalElse: CELSE '{' $@17 program $@18 '}' .
 
-    $default  reduce using rule 63 (conditionalElse)
+    $default  reduce using rule 62 (conditionalElse)
 
 
 State 196
 
-   66 conditionalElse: CELSE CIF '(' expression ')' '{' $@19 . program $@20 '}' conditionalElse
+   65 conditionalElse: CELSE CIF '(' expression ')' '{' $@19 . program $@20 '}' conditionalElse
 
     DLET        shift, and go to state 1
     DCONST      shift, and go to state 2
@@ -3154,33 +3156,33 @@ State 196
 
 State 197
 
-   66 conditionalElse: CELSE CIF '(' expression ')' '{' $@19 program . $@20 '}' conditionalElse
+   65 conditionalElse: CELSE CIF '(' expression ')' '{' $@19 program . $@20 '}' conditionalElse
 
-    $default  reduce using rule 65 ($@20)
+    $default  reduce using rule 64 ($@20)
 
     $@20  go to state 198
 
 
 State 198
 
-   66 conditionalElse: CELSE CIF '(' expression ')' '{' $@19 program $@20 . '}' conditionalElse
+   65 conditionalElse: CELSE CIF '(' expression ')' '{' $@19 program $@20 . '}' conditionalElse
 
     '}'  shift, and go to state 199
 
 
 State 199
 
-   66 conditionalElse: CELSE CIF '(' expression ')' '{' $@19 program $@20 '}' . conditionalElse
+   65 conditionalElse: CELSE CIF '(' expression ')' '{' $@19 program $@20 '}' . conditionalElse
 
     CELSE  shift, and go to state 172
 
-    $default  reduce using rule 60 (conditionalElse)
+    $default  reduce using rule 59 (conditionalElse)
 
     conditionalElse  go to state 200
 
 
 State 200
 
-   66 conditionalElse: CELSE CIF '(' expression ')' '{' $@19 program $@20 '}' conditionalElse .
+   65 conditionalElse: CELSE CIF '(' expression ')' '{' $@19 program $@20 '}' conditionalElse .
 
-    $default  reduce using rule 66 (conditionalElse)
+    $default  reduce using rule 65 (conditionalElse)

@@ -47,4 +47,6 @@ const hello = function (b = 2 || 9, a = b, c = 3) {
   }
 }
 
-hello(1, 2, k[2], 3 + 4, 7 || 8)
+c = hello(1, 2, k[2], 3 + 4, 7 || 8)
+
+a = hello(hello(2, 3), t[5])
