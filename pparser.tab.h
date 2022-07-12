@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_PARSER_TAB_H_INCLUDED
-# define YY_YY_PARSER_TAB_H_INCLUDED
+#ifndef YY_YY_PPARSER_TAB_H_INCLUDED
+# define YY_YY_PPARSER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -49,32 +49,24 @@ extern int yydebug;
     DCONST = 259,
     DVAR = 260,
     DFUNC = 261,
-    DAFUNC = 262,
-    VSTR = 263,
-    VINT = 264,
-    VBOOL = 265,
-    VFLOAT = 266,
-    IDENTIFIER = 267,
-    CIF = 268,
-    CELSE = 269,
-    ASSGNOP = 270,
-    EXPGT = 271,
-    EXPLT = 272,
-    EXPEQ = 273,
-    EXPDF = 274,
-    NULLCOALESCING = 275,
-    LOGOR = 276,
-    LOGAND = 277,
-    FRETURN = 278,
-    FBREAK = 279,
-    FCONTINUE = 280,
-    SEMICOLON = 281,
-    LFOR = 282,
-    LOF = 283,
-    LIN = 284,
-    LWHILE = 285,
-    CBLOCK = 286,
-    CINLINE = 287
+    VSTR = 262,
+    VINT = 263,
+    VBOOL = 264,
+    VFLOAT = 265,
+    IDENTIFIER = 266,
+    CIF = 267,
+    CELSE = 268,
+    ASSGNOP = 269,
+    EXPGT = 270,
+    EXPLT = 271,
+    EXPEQ = 272,
+    EXPDF = 273,
+    NULLCOALESCING = 274,
+    LOGOR = 275,
+    LOGAND = 276,
+    FRETURN = 277,
+    FBREAK = 278,
+    FCONTINUE = 279
   };
 #endif
 
@@ -83,11 +75,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 25 "parser.y" /* yacc.c:1909  */
+#line 18 "pparser.y" /* yacc.c:1909  */
 
 	char* ystr;
 
-#line 91 "parser.tab.h" /* yacc.c:1909  */
+#line 83 "pparser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -100,4 +92,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_PARSER_TAB_H_INCLUDED  */
+#endif /* !YY_YY_PPARSER_TAB_H_INCLUDED  */

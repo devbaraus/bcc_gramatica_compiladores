@@ -17,6 +17,7 @@ ID       [_a-zA-Z][_A-Za-z0-9]*
 "||"                 { printf("|| "); return(LOGOR); }
 "&&"                 { printf("&& "); return(LOGAND); }
 "=>"                 { printf("=> "); return(DAFUNC); }
+";"                  { printf(";"); return(SEMICOLON); } 
 "??"                 { printf("null-coalescing "); return(NULLCOALESCING); }
 "\""[_A-Za-z0-9 ]*"\""           { printf("string "); yylval.ystr = stringpool(yytext);  return(VSTR); }
 "\'"[_A-Za-z0-9]*"\'"          { printf("string "); yylval.ystr = stringpool(yytext);  return(VSTR); }
@@ -38,8 +39,8 @@ continue             { printf("return "); return(FCONTINUE); }
 break                { printf("return "); return(FBREAK); }
 {ID}                 { printf("identifier "); yylval.ystr = stringpool(yytext);  return(IDENTIFIER); }
 "\n"                 { printf("\n");}
-"//"[A-Za-z0-9_ ]*   {printf("inline comment "); }
-"/*"[A-Za-z0-9_ \n\r]*"*/" {printf("block comment "); }
+"//"[A-Za-z0-9_ ]*   {printf("inline comment "); return(CINLINE); }
+"/*"[A-Za-z0-9_ \n\r]*"*/" {printf("block comment "); return(CBLOCK); }
 [ \t]+ /* blank, tab, new line: eat up whitespace */
 .                    { printf("%c ",yytext[0]); return(yytext[0]); }
 

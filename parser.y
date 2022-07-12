@@ -31,13 +31,14 @@ void ScopeTab(){
 %token <ystr> VSTR VINT VBOOL VFLOAT IDENTIFIER
 %token <ystr> CIF CELSE
 %token ASSGNOP EXPGT EXPLT EXPEQ EXPDF NULLCOALESCING LOGOR LOGAND
-%token FRETURN FBREAK FCONTINUE
+%token FRETURN FBREAK FCONTINUE SEMICOLON
 %token LFOR LOF LIN LWHILE
+%token CBLOCK CINLINE 
 %left '?' ':' LOGOR LOGAND NULLCOALESCING
 %left '>' '<' '=' EXPGT EXPLT EXPEQ EXPDF
 %left '-' '+'
 %left '*' '/'
-%left '^'
+%left '[' ']'
 
 %type <ystr> program
 %type <ystr> assigns
@@ -45,32 +46,59 @@ void ScopeTab(){
 %type <ystr> statement
 %type <ystr> declarations
 // %type <ystr> value
-%type <ystr> anonymFunction
-%type <ystr> funcParamsNull
-%type <ystr> funcParams
+%type <ystr> anonymFunction flow
+%type <ystr> funcParamsNull funcParams funcArgsNull
+%type <ystr> arr_expression arr_values arr_index
 // %type <ystr> flowcontrol
 %%
 
-goal: program { global_scope = 0; }
+goal: program { global_scope = 0; } 
+| 
+;
 
 
-program : statement
-| statement program
+program : statement semicolon_not
+| statement semicolon_not program
+;
+
+semicolon_not: 
+| SEMICOLON
 ;
 
 statement: expression { if($1 != ""){ ScopeTab(); fprintf(output, "%s\n", $1);} }
 | declarations { if($1 != ""){ ScopeTab(); fprintf(output, "%s\n", $1);}}
+| assigns {if($1 != ""){ ScopeTab(); fprintf(output, "%s\n", $1);}}
 | conditional { $$=""; }
 | loop {$$="";}
-| assigns {if($1 != ""){ ScopeTab(); fprintf(output, "%s\n", $1);}}
+| IDENTIFIER '(' funcArgsNull ')' { ScopeTab(); fprintf(output, "%s( %s )", $1, $3);}
+| flow {if($1 != ""){ ScopeTab(); fprintf(output, "%s\n", $1);}}
 ;
 
-loop: LFOR '(' declarations ';' expression ';' assigns ')' '{' {
-	fprintf(output, "%s\nwhile %s:\n", $3, $5); 
+flow: FRETURN { $$="return"; }
+| FRETURN expression {
+	char t[1000]; 
+	sprintf(t, "return %s", $2); 
+	$$=stringpool(t);
+}
+| FBREAK {$$="break";}
+| FCONTINUE {$$="continue";}
+;
+
+loop: LFOR '(' declarations SEMICOLON expression SEMICOLON assigns ')' '{' {
+	ScopeTab();
+	fprintf(output, "%s\n", $3);
+	ScopeTab();
+	fprintf(output, "while %s:\n", $5); 
 	global_scope += 1;
 } program '}' {
 	ScopeTab();
 	fprintf(output, "%s\n", $7); 
+	global_scope -= 1;
+}
+| LFOR '(' DLET IDENTIFIER LOF IDENTIFIER ')' '{' {
+	fprintf(output, "for %s in %s:\n", $4, $6); 
+	global_scope += 1;
+} program '}' {
 	global_scope -= 1;
 }
 | LWHILE '(' expression ')' '{' {
@@ -119,7 +147,6 @@ declarations: DLET IDENTIFIER {
 	sprintf(t, "%s %s", t, w);
 	$$=stringpool(t);
 }
-
 | DCONST IDENTIFIER ASSGNOP {
 	fprintf(output, "def %s", $2);
 } anonymFunction { $$ = ""; }
@@ -142,6 +169,15 @@ assigns: IDENTIFIER ASSGNOP expression {
 	sprintf(t, "%s %s", t, w);
 	$$=stringpool(t);
 }
+| IDENTIFIER '[' arr_values ']' ASSGNOP expression {
+	char t[1000];
+	char w[1000];  
+	sprintf(t, "%s[%s] =", $1, $3); 
+	sprintf(w, "%s", $6); 
+	sprintf(t, "%s %s", t, w);
+	$$=stringpool(t);
+}
+;
 
 anonymFunction: DFUNC '(' { 
 	fprintf(output, "(");
@@ -166,11 +202,23 @@ funcParamsNull: { $$ = ""; }
 ;
 
 funcParams: IDENTIFIER { $$ = $1; fprintf(output, "%s", $1);}
+| assigns { $$ = $1; fprintf(output, "%s", $1); }
 | IDENTIFIER  {	
 	fprintf(output, "%s", $1);
 } ','  {	
-	fprintf(output, ",");
+	fprintf(output, ", ");
 } funcParams
+| assigns  {	
+	fprintf(output, "%s", $1);
+} ','  {	
+	fprintf(output, ", ");
+} funcParams
+;
+
+funcArgsNull: { $$ = ""; }
+| expression { char t[1000]; sprintf(t, "%s", $1); $$=stringpool(t);}
+| expression ',' funcArgsNull  { char t[1000]; sprintf(t, "%s, %s", $1, $3); $$=stringpool(t); } 
+| ',' funcArgsNull  { char t[1000]; sprintf(t, ", %s", $2); $$=stringpool(t); } 
 ;
 
 conditional: CIF '(' expression ')' '{' { 
@@ -204,6 +252,21 @@ conditionalElse:
 // | expression { $$ = $1; }
 // ;
 
+arr_expression: '[' ']' {$$="[ ]";}
+| '[' arr_values ']' { char t[1000]; sprintf(t, "[ %s ]", $2); $$=stringpool(t); } 
+;
+
+arr_values: expression { $$ = $1; }
+| expression ',' arr_values { char t[1000]; sprintf(t, "%s, %s", $1, $3); $$=stringpool(t); }
+;
+
+arr_index: IDENTIFIER '[' arr_values ']' {
+	char t[1000]; sprintf(t, "%s[%s]", $1, $3); $$=stringpool(t);
+}
+| arr_expression '[' arr_values ']' {
+	char t[1000]; sprintf(t, "%s[%s]", $1, $3); $$=stringpool(t);
+}
+;
 
 expression: VSTR { $$ = $1; }
 | VBOOL { $$ = $1 == stringpool("true") ? "True" : "False"; }
@@ -212,6 +275,8 @@ expression: VSTR { $$ = $1; }
 | IDENTIFIER  {	
 	$$= $1; 
 }
+| arr_index { $$ = $1; }
+| arr_expression { $$ = $1; }
 // | '(' expression ')' { char t[1000]; sprintf(t, "( %s )", $2); $$=stringpool(t); }
 | expression NULLCOALESCING expression { char t[1000]; sprintf(t, "%s or %s", $1, $3); $$=stringpool(t); }
 | expression '?' expression ':' expression { char t[1000]; sprintf(t, "%s if %s else %s", $3, $1, $5); $$=stringpool(t); }
